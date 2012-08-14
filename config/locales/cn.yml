@@ -1,0 +1,46 @@
+cn:
+  helpers:
+    label:
+      user:
+        email: "电子邮箱："
+        password: "密码："
+        password_confirmation: "确认："
+      sessions:
+        remember_me: "记住我"
+      account:
+        category: "帐户类型："
+        name: "帐户名称："
+        balance: "帐户余额："
+        interest_rate: "利率："
+        max_credit: "额度："
+      transaction:
+        transaction_category: "类别："
+        transaction_type: "类型："
+        amount: "数额："
+        description: "备注："
+        account: "帐户："
+        to_account: "转入帐户："
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "请输入电子邮箱"
+            password:
+              blank: "请输入密码"
+              confirmation: "密码不匹配"
+              too_short: "密码长度至少为6位"
+        account:
+          attributes:
+            name:
+              blank: "请输入帐户名称"
+            interest_rate:
+              not_a_number: "利率必须是一个数字"
+            balance:
+              not_a_number: "余额必须是一个数字"
+            max_credit:
+              not_a_number: "额度必须是一个数字"
+  time:
+    formats:
+      default: "%Y年%m月%d日"

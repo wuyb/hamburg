@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>晟乾理财</title>
+
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "bootstrap-modal" %>
+  <%= javascript_include_tag "bootstrap-tooltip" %>
+  <%= javascript_include_tag "bootstrap-popover" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <div class="container">
+   <div class="page-header">
+    <div class="row">
+      <div class="span6"><h1>晟乾理财</h1></div>
+      <% if user_signed_in? %>
+        <div class="span1 offset4"><span style="float: right"><%= current_user.email %></span></div>
+        <div class="span1"><%= link_to "退出", destroy_user_session_path, :method=>:delete, :class=>"btn btn-primary", :style=>"float: right" %></div>
+      <% else %>
+        <div class="span1 offset4"><%= link_to "登录", new_user_session_path, :class=>"btn", :style=>"float: right" %></div>
+        <div class="span1"><%= link_to "注册", new_user_registration_path, :class=>"btn btn-primary", :style=>"float: right" %></div>
+      <% end %>
+    </div>
+  </div>
+
+
+<%= yield %>
+
+<div class="row">
+  <div class="span1 offset2"><a href="#">关于我们</a></div>
+  <div class="span1 offset1"><a href="#">隐私条款</a></div>
+  <div class="span1 offset1"><a href="#">联系我们</a></div>
+  <div class="span3 offset1">北京晟乾科技发展有限公司</div>
+</div>
+
+</body>
+</html>

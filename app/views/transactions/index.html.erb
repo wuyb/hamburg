@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+        <%= render :partial => "shared/sidebar" %>
+    </div>
+    <div class="span10">
+
+        <table class="table table-striped" id="transactions-table">
+          <tr>
+            <th>帐户</th>
+            <th>金额</th>
+            <th>类型</th>
+            <th>类别</th>
+            <th>转入帐户</th>
+            <th>日期</th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        <% @transactions.each do |transaction| %>
+        <%= render :partial=>transaction %>
+        <% end %>
+    </table>
+
+    <br />
+
+    <%= link_to '记帐', new_transaction_path, :remote => true, :class=>"btn btn-primary btn-large", :style=>"float: right" %>
+    </div>
+</div>
+<br/>
+<div id="new-transaction" ></div>

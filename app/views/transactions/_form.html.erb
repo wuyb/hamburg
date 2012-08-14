@@ -1,0 +1,54 @@
+<%= form_for(@transaction, :remote => true) do |f| %>
+<div class="modal hide show fade" id="new-transaction-modal">
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <% if @transaction.persisted? %>
+      <h3>修改流水</h3>
+    <% else %>
+      <h3>新建流水</h3>
+    <% end %>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="field">
+      <%= f.label :account %>
+      <%= f.collection_select :account_id, @accounts, :id, :name %>
+    </div>
+    <div class="field">
+      <%= f.label :transaction_type %>
+      <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"], ["转帐", "0"]]) %>
+    </div>
+    <div class="field" id="transaction_to_account_field" style="display:none">
+      <%= f.label :to_account %>
+      <% if @transaction.account.nil? %>
+        <%= f.collection_select :to_account, @accounts.collect {|x| x.id == @accounts[0].id ? nil : x}.compact(), :id, :name %>
+      <% else %>
+        <%= f.collection_select :to_account, @accounts.collect {|x| x.id == @transaction.account.id ? nil : x}.compact(), :id, :name %>
+      <% end %>
+    </div>
+    <div class="field" id="transaction_transaction_category_field">
+      <%= f.label :transaction_category %>
+      <%= f.collection_select :transaction_category, TransactionCategory.find(:all, :conditions => 'transaction_type=1'), :id, :name %>
+    </div>
+    <div class="field">
+      <%= f.label :amount %>
+      <%= f.text_field :amount %>
+    </div>
+    <div class="field">
+      <%= f.label :description %>
+      <%= f.text_area :description, :rows => 5 %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">取消</a>
+    <% if @transaction.persisted? %>
+      <%= f.submit "修改流水", :class=>"btn btn-primary"%>
+    <% else %>
+      <%= f.submit "新建流水", :class=>"btn btn-primary"%>
+    <% end %>
+  </div>
+</div>
+<% end %>
+

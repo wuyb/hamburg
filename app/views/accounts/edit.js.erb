@@ -1,0 +1,21 @@
+$('#new-account').html($('<%= escape_javascript(render(:partial => "form", :object=>@account)) %>'))
+$('#myModal').modal('toggle');
+
+$('#account_name_info').popover('show');
+$('#account_balance_info').popover('show');
+$('#account_interest_rate_info').popover('show');
+$('#account_max_credit_info').popover('show');
+
+if ($('#account_category').val() != "信用帐户") {
+  $('#max_credit_div').hide();
+} else {
+  $('#max_credit_div').show();
+}
+
+$('#account_category').bind('change', function(){
+  if ($('#account_category').val() != "信用帐户") {
+    $('#max_credit_div').hide();
+  } else {
+    $('#max_credit_div').show();
+  }
+});

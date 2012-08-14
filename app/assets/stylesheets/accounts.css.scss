@@ -1,0 +1,17 @@
+// Place all the styles related to the Accounts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'twitter/bootstrap';
+
+.label {
+  font-size: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  color: lightblue;
+}
+
+.account-info {
+  display:inline;
+  margin-right: 5px;
+}

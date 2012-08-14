@@ -1,0 +1,18 @@
+<tr id="account_<%= account.id %>">
+  <td><%= account.category %></td>
+  <td><%= account.name %></td>
+  <td><%= account.balance %></td>
+  <td>
+    <% if account.category != "现金" %>
+      <%= account.interest_rate %>
+    <% end %>
+  </td>
+  <td>
+    <% if account.category == "信用帐户" %>
+      <%= account.max_credit %>
+    <% end %>
+  </td>
+  <td><%= link_to '记帐', new_transaction_path(:account=>account), :remote=>true %></td>
+  <td><%= link_to '修改', edit_account_path(account), :remote=>true %></td>
+  <td><%= link_to '删除', account, method: :delete, :remote=>true, data: { confirm: '确定要删除吗？' } %></td>
+</tr>

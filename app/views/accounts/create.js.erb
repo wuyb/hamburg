@@ -1,0 +1,14 @@
+<% if @account.errors.any? %>
+  $(".help-inline").remove();
+  $('div.error > input').unwrap();
+  <%- @account.errors.messages.each do |error| %>
+    var field_id = "account_" + '<%= error[0] %>';
+    $("#" + field_id).wrap('<div class="control-group error" />');
+    $("#" + field_id).after('<span class="help-inline">&nbsp;<%= error[1].join(',') %></span>');
+  <% end -%>
+<% else %>
+  $('#myModal').modal('hide');
+  $('#myModal').remove();
+  $('#accounts-table').append('<%= escape_javascript(render :partial=>@account) %>');
+  $('#account_<%= @account.id %> > td').effect("highlight", {}, 2000);
+<% end %>

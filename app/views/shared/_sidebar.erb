@@ -1,0 +1,5 @@
+<ul class="nav nav-list">
+  <li><h3><%= link_to_unless_current "主页", { :controller => "static", :action => "landing" } %></h3></li>
+  <li><h3><%= link_to_unless_current "我的帐户", { :controller => "accounts", :action => "index" } %></h3></li>
+  <li><h3><%= link_to_unless_current "我的流水", { :controller => "transactions", :action => "index" } %></h3></li>
+</ul>
