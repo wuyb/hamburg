@@ -11,6 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require flot/jquery.flot
 //= require jquery_ujs
 //= require_tree .
 //= require jquery.ui.all

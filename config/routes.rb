@@ -6,6 +6,7 @@ Hamburg::Application.routes.draw do
     get '/users/auth/:provider' => 'users/omniauth_callbacks#passthru'
   end
 
+  match '/transactions/plot' => 'transactions#plot'
   resources :accounts
   resources :transactions
 
