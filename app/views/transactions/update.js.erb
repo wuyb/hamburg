@@ -1,0 +1,14 @@
+<% if @transaction.errors.any? %>
+  $(".help-inline").remove();
+  $('div.error > input').unwrap();
+  <%- @transaction.errors.messages.each do |error| %>
+    var field_id = "transaction_" + '<%= error[0] %>';
+    $("#" + field_id).wrap('<div class="control-group error" />');
+    $("#" + field_id).after('<span class="help-inline">&nbsp;<%= error[1].join(',') %></span>');
+  <% end -%>
+<% else %>
+  $('#new-transaction-modal').modal('hide');
+  $('#new-transaction-modal').remove();
+  $('#transaction_<%= @transaction.id %>').replaceWith('<%= escape_javascript(render :partial=>"transaction", :object=>@transaction) %>');
+  $('#transaction_<%= @transaction.id %> > td').effect("highlight", {}, 2000);
+<% end %>

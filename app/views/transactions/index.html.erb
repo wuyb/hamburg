@@ -4,27 +4,40 @@
         <%= render :partial => "shared/sidebar" %>
     </div>
     <div class="span10">
-
+            <div class="well">
+        <div class="row-fluid">
+            <div class="span10">
+                已有流水<%= current_user.transactions.length %>笔
+            </div>
+            <div class="span2">
+                <%= link_to '记帐', new_transaction_path, :remote => true, :class=>"btn btn-primary", :style=>"float: right" %>
+            </div>
+        </div>
+        </div>
+        <br/>
+        <div class="row-fluid">
+            <div class="span12">
         <table class="table table-striped" id="transactions-table">
           <tr>
-            <th>帐户</th>
-            <th>金额</th>
-            <th>类型</th>
-            <th>类别</th>
-            <th>转入帐户</th>
-            <th>日期</th>
+            <th><%= sortable 'account_id', '帐户' %></th>
+            <th><%= sortable 'amount', '金额' %></th>
+            <th><%= sortable 'transaction_type', '类型' %></th>
+            <th><%= sortable 'transaction_category_id', '类别' %></th>
+            <th><%= sortable 'to_account_id', '转入帐户' %></th>
+            <th><%= sortable 'created_at', '日期' %></th>
             <th></th>
             <th></th>
-        </tr>
-
-        <% @transactions.each do |transaction| %>
-        <%= render :partial=>transaction %>
-        <% end %>
-    </table>
-
-    <br />
-
-    <%= link_to '记帐', new_transaction_path, :remote => true, :class=>"btn btn-primary btn-large", :style=>"float: right" %>
+          </tr>
+          <% @transactions.each do |transaction| %>
+              <%= render :partial=>transaction %>
+          <% end %>
+        </table>
+        <div style="float:right;display:inline">
+            <%= paginate @transactions %>
+        </div>
+    </div>
+    </div>
+    </div>
     </div>
 </div>
 <br/>

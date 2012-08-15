@@ -18,7 +18,7 @@
     </div>
     <div class="field">
       <%= f.label :transaction_type %>
-      <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"], ["转帐", "0"]]) %>
+      <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"], ["转帐", "0"]], @transaction.transaction_type) %>
     </div>
     <div class="field" id="transaction_to_account_field" style="display:none">
       <%= f.label :to_account %>
@@ -30,11 +30,18 @@
     </div>
     <div class="field" id="transaction_transaction_category_field">
       <%= f.label :transaction_category %>
-      <%= f.collection_select :transaction_category, TransactionCategory.find(:all, :conditions => 'transaction_type=1'), :id, :name %>
+      <%= f.collection_select :transaction_category, 
+                              TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : 1).to_s),
+                              :id, :name %>
     </div>
     <div class="field">
       <%= f.label :amount %>
       <%= f.text_field :amount %>
+    </div>
+    <div class="field">
+      <%= f.label :created_at %>
+      <input type="input" value="<%= l @transaction.created_at %>" id="transaction_created_at_value" />
+      <%= f.hidden_field :created_at, :value=>@transaction.created_at %>
     </div>
     <div class="field">
       <%= f.label :description %>

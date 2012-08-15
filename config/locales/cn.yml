@@ -20,6 +20,7 @@ cn:
         description: "备注："
         account: "帐户："
         to_account: "转入帐户："
+        created_at: "日期："
   activerecord:
     errors:
       models:
@@ -41,6 +42,17 @@ cn:
               not_a_number: "余额必须是一个数字"
             max_credit:
               not_a_number: "额度必须是一个数字"
+        transaction:
+          attributes:
+            amount:
+              not_a_number: "数额必须是一个数字"
   time:
     formats:
       default: "%Y年%m月%d日"
+  views:
+    pagination:
+      first: "&laquo; 第一页"
+      last: "最后一页 &raquo;"
+      previous: "&lsaquo; 上一页"
+      next: "下一页 &rsaquo;"
+      truncate: "..."

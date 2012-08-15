@@ -22,3 +22,4 @@ gem "omniauth-weibo-oauth2"
 gem 'jquery-rails'
 gem 'therubyracer'
 gem 'nokogiri'
+gem 'kaminari'
