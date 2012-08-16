@@ -112,52 +112,7 @@ class TransactionsController < ApplicationController
     end
   end
 
-  def plot
-    transactions_by_day = plot_by_date
-
-    respond_to do |format|
-      format.json {render json: transactions_by_day}
-    end
-  end
-
   private
-
-  def plot_by_date(start_time=nil, end_time=nil)
-    # default the past week's transactions are plot
-    end_time ||= Time.now
-    start_time ||= Time.now.ago(3600 * 24 * 7)
-
-    days = (end_time - start_time).to_i / (24 * 60 * 60)
-
-    transactions = current_user.transactions.where("transactions.created_at < ? and transactions.created_at > ? and transaction_type != 0", end_time, start_time)
-    transactions_by_day = {:income=>{}, :expense=>{}}
-
-    (0..days).each do |i|
-      transactions_by_day[:income][Time.now.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
-      transactions_by_day[:expense][Time.now.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
-    end
-
-
-    transactions.each do |t|
-      time = t.created_at.to_date.to_time(:utc).to_f * 1000
-      if t.transaction_type == 1
-        day = transactions_by_day[:income][time].nil? ?  {count:0, total:0} : transactions_by_day[:income][time]
-      elsif t.transaction_type == -1
-        day = transactions_by_day[:expense][time].nil? ?  {count:0, total:0} : transactions_by_day[:expense][time]
-      end
-      day[:count] = day[:count] + 1
-      day[:total] = day[:total] + t.amount
-
-      if t.transaction_type == 1
-        transactions_by_day[:income][time] = day
-      elsif t.transaction_type == -1
-        transactions_by_day[:expense][time] = day
-      end
-
-    end
-
-    transactions_by_day
-  end
 
   def sort_column
     Transaction.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
