@@ -56,6 +56,9 @@ Hamburg::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  authenticated :user do
+    root :to => "accounts#index"
+  end
 
   root :to => 'static#landing'
 

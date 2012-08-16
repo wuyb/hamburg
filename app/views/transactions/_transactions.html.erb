@@ -1,11 +1,11 @@
 
         <div class="row-fluid">
             <!-- the range buttons -->
-            <div class="btn-group" data-toggle="buttons-radio" style="float:right;margin-bottom:10px">
-              <button class="btn" id="filter_week">一周</button>
-              <button class="btn" id="filter_month">一月</button>
-              <button class="btn" id="filter_year">一年</button>
-              <button class="btn" id="filter_all">全部</button>
+            <div class="btn-group" data-toggle="buttons-radio" style="float:right;margin-bottom:10px" id="date-filter">
+                <%= link_to '一周', {:controller=>'transactions', :action=>'index', :by=>"week"}, :remote => true, :class=>"btn", :id=>"filter_week" %>
+                <%= link_to '一月', {:controller=>'transactions', :action=>'index', :by=>"month"}, :remote => true, :class=>"btn", :id=>"filter_month" %>
+                <%= link_to '一年', {:controller=>'transactions', :action=>'index', :by=>"year"}, :remote => true, :class=>"btn", :id=>"filter_year" %>
+                <%= link_to '全部', {:controller=>'transactions', :action=>'index'}, :remote => true, :class=>"btn", :id=>"filter_all" %>
           </div>
       </div>
       <div class="well">
@@ -41,7 +41,7 @@
                 <% end %>
             </table>
             <div style="float:right;display:inline">
-                <%= paginate @transactions %>
+                <%= paginate @paged_transactions %>
             </div>
         </div>
     </div>

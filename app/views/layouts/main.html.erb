@@ -31,15 +31,27 @@
     </div>
   </div>
 
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2" id="main-sidebar">
+        <%= render :partial => "shared/sidebar" %>
+    </div>
+    <div class="span10" id="main-content">
 
-<%= yield %>
+      <%= yield %>
 
+    </div>
+  </div>
+</div>
+
+<hr/>
 <div class="row">
   <div class="span1 offset2"><a href="#">关于我们</a></div>
   <div class="span1 offset1"><a href="#">隐私条款</a></div>
   <div class="span1 offset1"><a href="#">联系我们</a></div>
   <div class="span3 offset1">北京晟乾科技发展有限公司</div>
 </div>
+
 
 </body>
 </html>

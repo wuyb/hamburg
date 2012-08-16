@@ -1,0 +1,59 @@
+function showTooltip(x, y, contents) {
+  $('<div id="tooltip">' + contents + '</div>').css( {
+    position: 'absolute',
+    display: 'none',
+    top: y + 5,
+    left: x + 5,
+    border: '1px solid #fdd',
+    padding: '2px',
+    'background-color': '#fee',
+    opacity: 0.80
+  }).appendTo("body").fadeIn(200);
+}
+
+function flot_transaction_by_date() {
+  var json = <%= transactions_json_flot_data(@transactions, @days).to_json.html_safe %>;
+  var incomes = [];
+  var expenses = [];
+  for (var key in json.income) {
+    incomes.push([key, json.income[key].total]);
+  }
+  for (var key in json.expense) {
+    expenses.push([key, json.expense[key].total]);
+  }
+  console.log("incomes", incomes);
+  $("#transactions-by-time").empty();
+  $.plot($("#transactions-by-time"),
+        [{data: incomes, label: '收入'}, {data: expenses, label: '支出'}],  
+        {
+          xaxis: { mode: "time", timeformat: "%m月%d日"/*, autoscaleMargin: 0.02*/ },
+          series: {
+           lines: { show: true },
+           points: { show: true }
+          },
+          grid: { hoverable: true, clickable: true }
+//               bars: { show: true, barWidth: 60*60*12*1000, align: "center" }
+        }
+  );
+}
+
+$('#main-content').html('<%= escape_javascript(render :partial=>"transactions", :object=>@paged_transactions) %>');
+$('#main-sidebar').html('<%= escape_javascript(render :partial=>"shared/sidebar") %>');
+$('#date-filter > .btn').removeClass('active');
+<% if !params[:by].nil? %>
+  $('#filter_<%= params[:by] %>').addClass('active');
+<% else %>
+  $('#filter_all').addClass('active');
+<% end %>
+
+flot_transaction_by_date();
+$("#transactions-by-time").bind("plothover", function (event, pos, item) {
+  if (item) {
+    $("#tooltip").remove();
+    var y = item.datapoint[1].toFixed(2);
+    showTooltip(item.pageX, item.pageY, item.series.label + " " + y + "元");
+  }
+  else {
+    $("#tooltip").remove();
+  }
+});

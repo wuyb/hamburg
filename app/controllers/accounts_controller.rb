@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+  layout  "main"
   helper_method :sort_column, :sort_direction
   before_filter :authenticate_user!
 
@@ -7,6 +8,7 @@ class AccountsController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.js
       format.json { render json: @accounts }
     end
   end

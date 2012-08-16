@@ -1,5 +1,10 @@
 <ul class="nav nav-list">
-  <li><h3><%= link_to_unless_current "主页", { :controller => "static", :action => "landing" } %></h3></li>
-  <li><h3><%= link_to_unless_current "我的帐户", { :controller => "accounts", :action => "index" } %></h3></li>
-  <li><h3><%= link_to_unless_current "我的流水", { :controller => "transactions", :action => "index" } %></h3></li>
+  <li class="nav-header">
+    <h4>财务状况</h4>
+  </li>
+  <li><%= link_to_unless_current ('<i class="icon-asterisk"></i>&nbsp;' + '我的帐户').html_safe, { :controller => "accounts", :action => "index" }, :remote=>true %></li>
+  <li><%= link_to_unless_current ('<i class="icon-th-list"></i>&nbsp;' + '我的流水').html_safe, { :controller => "transactions", :action => "index" }, :remote=>true %></li>
+  <li class="nav-header">
+    <h4>理财推荐</h4>
+  </li>
 </ul>

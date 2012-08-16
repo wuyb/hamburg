@@ -1,12 +1,36 @@
 # encoding: utf-8
 class TransactionsController < ApplicationController
+  layout  "main"
   helper_method :sort_column, :sort_direction
   before_filter :authenticate_user!
 
   def index
-    @transactions = current_user.transactions.order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
+    @days = 0
+    @start_date = Time.at(0)
+
+    if !params[:by].nil?
+      @start_date = case params[:by]
+        when "week" then Time.now.weeks_ago(1)
+        when "month"  then Time.now.months_ago(1)
+        when "year"   then Time.now.years_ago(1)
+        else Time.at(0)
+      end
+      @days = case params[:by]
+        when "week" then 7
+        when "month"  then 30
+        when "year"   then 365
+        else 0
+      end
+      @transactions = current_user.transactions.where('transactions.created_at > ?', @start_date)
+      @paged_transactions = current_user.transactions.where('transactions.created_at > ?', @start_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
+    else
+      @transactions = current_user.transactions
+      @paged_transactions = current_user.transactions.order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
+    end
+
     respond_to do |format|
       format.html
+      format.js
     end
   end
 
@@ -89,12 +113,28 @@ class TransactionsController < ApplicationController
   end
 
   def plot
-    transactions = current_user.transactions.where("transactions.created_at > ? and transaction_type != 0", Time.now.ago(3600 * 24 * 7))
+    transactions_by_day = plot_by_date
+
+    respond_to do |format|
+      format.json {render json: transactions_by_day}
+    end
+  end
+
+  private
+
+  def plot_by_date(start_time=nil, end_time=nil)
+    # default the past week's transactions are plot
+    end_time ||= Time.now
+    start_time ||= Time.now.ago(3600 * 24 * 7)
+
+    days = (end_time - start_time).to_i / (24 * 60 * 60)
+
+    transactions = current_user.transactions.where("transactions.created_at < ? and transactions.created_at > ? and transaction_type != 0", end_time, start_time)
     transactions_by_day = {:income=>{}, :expense=>{}}
 
-    (0..6).each do |i|
-      transactions_by_day[:income][Time.now.ago(3600 * 24 * (6 - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
-      transactions_by_day[:expense][Time.now.ago(3600 * 24 * (6 - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
+    (0..days).each do |i|
+      transactions_by_day[:income][Time.now.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
+      transactions_by_day[:expense][Time.now.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
     end
 
 
@@ -116,13 +156,8 @@ class TransactionsController < ApplicationController
 
     end
 
-    p transactions_by_day.to_json
-    respond_to do |format|
-      format.json {render json: transactions_by_day}
-    end
+    transactions_by_day
   end
-
-  private
 
   def sort_column
     Transaction.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
