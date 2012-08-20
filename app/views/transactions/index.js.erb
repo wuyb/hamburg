@@ -21,7 +21,6 @@ function flot_transaction_by_date() {
   for (var key in json.expense) {
     expenses.push([key, json.expense[key].total]);
   }
-  console.log("incomes", incomes);
   $("#transactions-by-time").empty();
   $.plot($("#transactions-by-time"),
         [{data: incomes, label: '收入'}, {data: expenses, label: '支出'}],  

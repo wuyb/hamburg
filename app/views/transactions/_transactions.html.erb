@@ -36,12 +36,12 @@
                     <th></th>
                     <th></th>
                 </tr>
-                <% @transactions.each do |transaction| %>
+                <% @paged_transactions.each do |transaction| %>
                     <%= render :partial=>transaction %>
                 <% end %>
             </table>
             <div style="float:right;display:inline">
-                <%= paginate @paged_transactions %>
+                    <%= paginate @paged_transactions, :remote=>true %>
             </div>
         </div>
     </div>

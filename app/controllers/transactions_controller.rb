@@ -5,22 +5,10 @@ class TransactionsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @days = 0
-    @start_date = Time.at(0)
+    @days = days params
+    @start_date = start_date params
 
     if !params[:by].nil?
-      @start_date = case params[:by]
-        when "week" then Time.now.weeks_ago(1)
-        when "month"  then Time.now.months_ago(1)
-        when "year"   then Time.now.years_ago(1)
-        else Time.at(0)
-      end
-      @days = case params[:by]
-        when "week" then 7
-        when "month"  then 30
-        when "year"   then 365
-        else 0
-      end
       @transactions = current_user.transactions.where('transactions.created_at > ?', @start_date)
       @paged_transactions = current_user.transactions.where('transactions.created_at > ?', @start_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
     else
@@ -122,5 +110,22 @@ class TransactionsController < ApplicationController
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
+  def start_date(params)
+        return case params[:by]
+          when "week" then Time.now.weeks_ago(1)
+          when "month"  then Time.now.months_ago(1)
+          when "year"   then Time.now.years_ago(1)
+          else Time.at(0)
+        end
+  end
+
+  def days(params)
+      return case params[:by]
+        when "week" then 7
+        when "month"  then 30
+        when "year"   then 365
+        else 0
+      end
+  end
 
 end
