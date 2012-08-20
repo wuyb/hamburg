@@ -28,7 +28,8 @@ function flot_transaction_by_date() {
           xaxis: { mode: "time", timeformat: "%m月%d日"/*, autoscaleMargin: 0.02*/ },
           series: {
            lines: { show: true },
-           points: { show: true }
+//           points: { show: true }
+           points: { show: <%= @days <= 30 %> }
           },
           grid: { hoverable: true, clickable: true }
 //               bars: { show: true, barWidth: 60*60*12*1000, align: "center" }
