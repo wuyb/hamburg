@@ -41,7 +41,7 @@
                 <% end %>
             </table>
             <div style="float:right;display:inline">
-                    <%= paginate @paged_transactions, :remote=>true %>
+                    <%= paginate @paged_transactions, :remote=>true, :params => {:by=>@by} %>
             </div>
         </div>
     </div>

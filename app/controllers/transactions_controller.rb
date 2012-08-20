@@ -7,6 +7,7 @@ class TransactionsController < ApplicationController
   def index
     @days = days params
     @start_date = start_date params
+    @by = params[:by].nil? ? 'all' : params[:by]
 
     if !params[:by].nil?
       @transactions = current_user.transactions.where('transactions.created_at > ?', @start_date)
