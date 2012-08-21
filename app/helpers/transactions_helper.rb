@@ -1,4 +1,19 @@
+# encoding: utf-8
 module TransactionsHelper
+
+  def flot_transactions_by_date_title(start_date, end_date, by=nil)
+    range = (l start_date) + "—" + (l end_date)
+    if by.nil?
+      return "(" + range + ")";
+    else
+      return case by
+        when "week" then "过去一周 (" + range + ")"
+        when "month" then "过去一月 (" + range + ")"
+        when "year" then "过去一年 (" + range + ")"
+        else "  全部 (" + range + ")"
+      end
+    end 
+  end
 
   def transactions_json_flot_data(transactions, days)
     start_date = Time.now

@@ -10,7 +10,10 @@
       </div>
       <div class="well">
         <div class="row-fluid">
-            <div class="span2 offset10" style="float:right">
+            <div class="span10">
+                <h4 style="text-align:center"><%= flot_transactions_by_date_title @start_date, Time.now, @by %></h4>
+            </div>
+            <div class="span2" style="float:right">
                 <input type="checkbox" id="show_income_checkbox" checked="true"> 收入 </input> 
                 <input type="checkbox" id="show_expense_checkbox" checked="true"> 支出 </input> 
             </div>
