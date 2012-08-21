@@ -70,8 +70,9 @@ flot_transaction_by_date();
 $("#transactions-by-time").bind("plothover", function (event, pos, item) {
   if (item) {
     $("#tooltip").remove();
+    var x = item.datapoint[0];
     var y = item.datapoint[1].toFixed(2);
-    showTooltip(item.pageX, item.pageY, item.series.label + " " + y + "元");
+    showTooltip(item.pageX, item.pageY, formatDate(new Date(x), "%Y年%m月%d日") + ", " + item.series.label + " " + y + "元");
   }
   else {
     $("#tooltip").remove();
