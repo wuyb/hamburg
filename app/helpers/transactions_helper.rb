@@ -2,37 +2,22 @@
 module TransactionsHelper
 
   def flot_transactions_by_date_title(start_date, end_date, by=nil)
-    range = (l start_date) + "—" + (l end_date)
-    if by.nil?
-      return "(" + range + ")";
-    else
-      return case by
-        when "week" then "过去一周 (" + range + ")"
-        when "month" then "过去一月 (" + range + ")"
-        when "year" then "过去一年 (" + range + ")"
-        else "全部 (人类纪元开始—" + (l end_date) + ")"
-      end
-    end 
+    (start_date > Time.at(0) ? (l start_date) : "人类纪元开始") + "—" + (l end_date)
   end
 
-  def transactions_json_flot_data(transactions, days)
-    start_date = Time.now
-    if days == 0
-      if transactions.length > 0
-        transactions.each do |t|
-          start_date = t.created_at if t.created_at < start_date
-        end
-        days = (Time.now - start_date).to_f / (60 * 60 * 24)
-      else
-        days = 7
-      end
+  def transactions_json_flot_data(transactions, start_date, end_date)
+    start_date = Time.now if start_date == Time.at(0)
+    transactions.each do |t|
+      start_date = t.created_at if t.created_at < start_date
     end
+
+    days = (end_date - start_date) / (60 * 60 * 24)
 
     transactions_by_day = {:income=>{}, :expense=>{}}
 
     (0..days).each do |i|
-      transactions_by_day[:income][Time.now.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
-      transactions_by_day[:expense][Time.now.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
+      transactions_by_day[:income][end_date.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
+      transactions_by_day[:expense][end_date.ago(3600 * 24 * (days - i)).to_date.to_time(:utc).to_f * 1000] = {:count=>0, :total=>0}
     end
 
 

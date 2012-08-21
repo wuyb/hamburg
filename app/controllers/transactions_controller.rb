@@ -7,15 +7,16 @@ class TransactionsController < ApplicationController
   def index
     @days = days params
     @start_date = start_date params
+    @end_date = end_date params
     @by = params[:by].nil? ? 'all' : params[:by]
 
-    if !params[:by].nil?
-      @transactions = current_user.transactions.where('transactions.created_at > ?', @start_date)
-      @paged_transactions = current_user.transactions.where('transactions.created_at > ?', @start_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
-    else
-      @transactions = current_user.transactions
-      @paged_transactions = current_user.transactions.order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
-    end
+#    if !params[:by].nil? || !params
+      @transactions = current_user.transactions.since(@start_date).until(@end_date)
+      @paged_transactions = current_user.transactions.since(@start_date).until(@end_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
+#    else
+#      @transactions = current_user.transactions
+#      @paged_transactions = current_user.transactions.order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
+#    end
 
     respond_to do |format|
       format.html
@@ -112,21 +113,45 @@ class TransactionsController < ApplicationController
   end
 
   def start_date(params)
+    if !params[:start_date].nil? and params[:start_date] != ''
+      return Time.parse(params[:start_date])
+    elsif !params[:by].nil?
         return case params[:by]
           when "week" then Time.now.weeks_ago(1)
           when "month"  then Time.now.months_ago(1)
           when "year"   then Time.now.years_ago(1)
           else Time.at(0)
         end
+    else
+      Time.at(0)
+    end
+  end
+
+  def end_date(params)
+    if !params[:end_date].nil? and params[:end_date] != ''
+      return Time.parse(params[:end_date])
+    else
+      Time.now
+    end
   end
 
   def days(params)
+    if (!params[:start_date].nil? and params[:start_date] != '') or (!params[:end_date].nil? and params[:end_date] != '')
+      if start_date(params) == Time.at(0)
+        return 0
+      else
+        return (end_date(params) - start_date(params)) / (60 * 60 * 24) + 1
+      end
+    elsif !params[:by].nil?
       return case params[:by]
         when "week" then 7
         when "month"  then 30
         when "year"   then 365
         else 0
       end
+    else
+      0
+    end
   end
 
 end

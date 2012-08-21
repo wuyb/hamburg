@@ -14,6 +14,8 @@ class Transaction < ActiveRecord::Base
   before_save      :revert_account
   before_destroy   :revert_account
 
+  scope :since, lambda {|date| {:conditions=>{:created_at => (date .. Time.now)}}}
+  scope :until, lambda {|date| {:conditions=>{:created_at => (Time.at(0) .. date)}}}
   protected
 
   def init
