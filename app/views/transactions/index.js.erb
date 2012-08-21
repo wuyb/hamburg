@@ -12,18 +12,31 @@ function showTooltip(x, y, contents) {
 }
 
 function flot_transaction_by_date() {
+  var showIncome = $("#show_income_checkbox").attr("checked");
+  var showExpense = $("#show_expense_checkbox").attr("checked");
+
   var json = <%= transactions_json_flot_data(@transactions, @days).to_json.html_safe %>;
   var incomes = [];
   var expenses = [];
-  for (var key in json.income) {
-    incomes.push([key, json.income[key].total]);
+  var data = [];
+
+  if (showIncome) {
+    for (var key in json.income) {
+      incomes.push([key, json.income[key].total]);
+    }
+    data.push({data: incomes, label:"收入", color:"#EDC240"});
   }
-  for (var key in json.expense) {
-    expenses.push([key, json.expense[key].total]);
+  if (showExpense) {
+    for (var key in json.expense) {
+      expenses.push([key, json.expense[key].total]);
+    }
+    data.push({data: expenses, label:"支出", color:"#AFD8F8"});
   }
+
+
   $("#transactions-by-time").empty();
   $.plot($("#transactions-by-time"),
-        [{data: incomes, label: '收入'}, {data: expenses, label: '支出'}],  
+        data,  
         {
           xaxis: { mode: "time", timeformat: "%m月%d日"/*, autoscaleMargin: 0.02*/ },
           series: {
@@ -37,16 +50,23 @@ function flot_transaction_by_date() {
   );
 }
 
+// show the data by table
 $('#main-content').html('<%= escape_javascript(render :partial=>"transactions", :object=>@paged_transactions) %>');
 $('#main-sidebar').html('<%= escape_javascript(render :partial=>"shared/sidebar") %>');
+
+// data filter
 $('#date-filter > .btn').removeClass('active');
+
 <% if !params[:by].nil? %>
   $('#filter_<%= params[:by] %>').addClass('active');
 <% else %>
   $('#filter_all').addClass('active');
 <% end %>
 
+// flot the data
 flot_transaction_by_date();
+
+// events
 $("#transactions-by-time").bind("plothover", function (event, pos, item) {
   if (item) {
     $("#tooltip").remove();
@@ -56,4 +76,12 @@ $("#transactions-by-time").bind("plothover", function (event, pos, item) {
   else {
     $("#tooltip").remove();
   }
+});
+
+$("#show_income_checkbox").bind("click", function() {
+  flot_transaction_by_date();
+});
+
+$("#show_expense_checkbox").bind("click", function() {
+  flot_transaction_by_date();
 });
