@@ -10,7 +10,7 @@ module TransactionsHelper
         when "week" then "过去一周 (" + range + ")"
         when "month" then "过去一月 (" + range + ")"
         when "year" then "过去一年 (" + range + ")"
-        else "  全部 (" + range + ")"
+        else "全部 (人类纪元开始—" + (l end_date) + ")"
       end
     end 
   end
