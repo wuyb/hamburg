@@ -50,6 +50,72 @@ function flot_transaction_by_date() {
   );
 }
 
+function flot_transaction_by_category() {
+
+  var json = <%= transactions_json_flot_data_by_category(@transactions).to_json.html_safe %>;
+  var incomes = [];
+  var expenses = [];
+
+  for (var key in json.income) {
+      incomes.push({label:key, data:json.income[key].total});
+  }
+
+  for (var key in json.expense) {
+      expenses.push({label:key, data:json.expense[key].total});
+  }
+
+  $("#transactions-by-category-income").empty();
+  $.plot($("#transactions-by-category-income"), incomes,
+        {
+          series: {
+            pie: { 
+              show: true,
+              label: {
+                show: true,
+                radius: 1/2,
+                formatter: function(label, series){
+                  return '<div style="font-size:10pt;text-align:center;padding:2px;color:black;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                },
+                background: { opacity: 1 }
+              }
+            }
+          },
+          legend: {
+            show: true
+          },
+          grid: {
+            hoverable: true,
+            clickable: true
+          }
+        }
+  );
+  $("#transactions-by-category-expense").empty();
+  $.plot($("#transactions-by-category-expense"), expenses,
+        {
+          series: {
+            pie: { 
+              show: true,
+              label: {
+                show: true,
+                radius: 1/2,
+                formatter: function(label, series){
+                  return '<div style="font-size:10pt;text-align:center;padding:2px;color:black;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                },
+                background: { opacity: 1 }
+              }
+            }
+          },
+          legend: {
+            show: true
+          },
+          grid: {
+            hoverable: true,
+            clickable: true
+          }
+        }
+  );
+}
+
 // show the data by table
 $('#main-content').html('<%= escape_javascript(render :partial=>"transactions", :object=>@paged_transactions) %>');
 
@@ -96,3 +162,19 @@ $("#show_expense_checkbox").bind("click", function() {
 });
 
 $("#flot_transactions_by_date_title").html("<%= flot_transactions_by_date_title @start_date, @end_date, @by %>");
+
+$('#flot_type_value').attr("value", "<%= @flot_type %>");
+
+$('#flot-tab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+    $('#flot_type_value').val($(this).attr("name"));
+})
+
+$('.btn').bind('ajax:before', function() {
+    if ($('#by_date').hasClass('active')) {
+      $(this).data('params', { flot_type: 'by_date' });
+    } else if ($('#by_category').hasClass('active')) {
+      $(this).data('params', { flot_type: 'by_category' });
+    }
+});

@@ -102,6 +102,7 @@ class TransactionsController < ApplicationController
     @by = params[:by].nil? ? "all" : params[:by]
     @start_date = start_date params
     @end_date = end_date params
+    @flot_type = params[:flot_type].nil? ? "by_date" : params[:flot_type]
 
     @transactions = current_user.transactions.since(@start_date).until(@end_date)
     @paged_transactions = current_user.transactions.since(@start_date).until(@end_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)

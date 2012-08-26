@@ -2,6 +2,8 @@
 
 // update the plot
 flot_transaction_by_date();
+flot_transaction_by_category();
+$('#flot-tab a[href="#<%= @flot_type %>"]').tab('show');
 
 // update the table
 <% if @transaction.errors.any? %>

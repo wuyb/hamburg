@@ -6,3 +6,6 @@ $('#main-sidebar').html('<%= escape_javascript(render :partial=>"shared/sidebar"
 
 // flot the data
 flot_transaction_by_date();
+flot_transaction_by_category();
+
+$('#flot-tab a[href="#<%= @flot_type %>"]').tab('show');

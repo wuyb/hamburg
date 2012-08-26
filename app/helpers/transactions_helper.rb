@@ -44,4 +44,29 @@ module TransactionsHelper
     transactions_by_day
   end
 
+  def transactions_json_flot_data_by_category(transactions)
+    transactions_by_category = {:income=>{}, :expense=>{}}
+
+    transactions.each do |t|
+      if t.transaction_type == 1
+        category = transactions_by_category[:income][t.transaction_category.name].nil? ?  {count:0, total:0} : transactions_by_category[:income][t.transaction_category.name]
+      elsif t.transaction_type == -1
+        category = transactions_by_category[:expense][t.transaction_category.name].nil? ?  {count:0, total:0} : transactions_by_category[:expense][t.transaction_category.name]
+      else
+        next
+      end
+      category[:count] = category[:count] + 1
+      category[:total] = category[:total] + t.amount
+
+      if t.transaction_type == 1
+        transactions_by_category[:income][t.transaction_category.name] = category
+      elsif t.transaction_type == -1
+        transactions_by_category[:expense][t.transaction_category.name] = category
+      end
+
+    end
+
+    transactions_by_category
+  end
+
 end

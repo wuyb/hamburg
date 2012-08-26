@@ -15,35 +15,37 @@
 //= require jquery_ujs
 //= require_tree .
 //= require jquery.ui.all
-    function formatDate(d, fmt) {
-        if (typeof d.strftime == "function") {
-            return d.strftime(fmt);
-        }
-        var leftPad = function(n, pad) {
-            n = "" + n;
-            pad = "" + (pad == null ? "0" : pad);
-            return n.length == 1 ? pad + n : n;
-        };
+//= require twitter/bootstrap
+
+function formatDate(d, fmt) {
+    if (typeof d.strftime == "function") {
+        return d.strftime(fmt);
+    }
+    var leftPad = function(n, pad) {
+        n = "" + n;
+        pad = "" + (pad == null ? "0" : pad);
+        return n.length == 1 ? pad + n : n;
+    };
+    
+    var r = [];
+    var escape = false;
+    var hours = d.getHours();
+    var isAM = hours < 12;
+
+    var hours12;
+    if (hours > 12) {
+        hours12 = hours - 12;
+    } else if (hours == 0) {
+        hours12 = 12;
+    } else {
+        hours12 = hours;
+    }
+
+    for (var i = 0; i < fmt.length; ++i) {
+        var c = fmt.charAt(i);
         
-        var r = [];
-        var escape = false;
-        var hours = d.getHours();
-        var isAM = hours < 12;
-
-        var hours12;
-        if (hours > 12) {
-            hours12 = hours - 12;
-        } else if (hours == 0) {
-            hours12 = 12;
-        } else {
-            hours12 = hours;
-        }
-
-        for (var i = 0; i < fmt.length; ++i) {
-            var c = fmt.charAt(i);
-            
-            if (escape) {
-                switch (c) {
+        if (escape) {
+            switch (c) {
                 case 'd': c = leftPad(d.getDate()); break;
                 case 'e': c = leftPad(d.getDate(), " "); break;
                 case 'H': c = leftPad(hours); break;
@@ -57,16 +59,16 @@
                 case 'p': c = (isAM) ? ("" + "am") : ("" + "pm"); break;
                 case 'P': c = (isAM) ? ("" + "AM") : ("" + "PM"); break;
                 case 'w': c = "" + d.getDay(); break;
-                }
-                r.push(c);
-                escape = false;
             }
-            else {
-                if (c == "%")
-                    escape = true;
-                else
-                    r.push(c);
-            }
+            r.push(c);
+            escape = false;
         }
-        return r.join("");
+        else {
+            if (c == "%")
+                escape = true;
+            else
+                r.push(c);
+        }
     }
+    return r.join("");
+}
