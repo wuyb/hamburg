@@ -1,3 +1,8 @@
-  $('#transaction_<%= @transaction.id %>').hide("fade", {}, 1000, function() {
+$('#transaction_<%= @transaction.id %>').hide("fade", {}, 1000, function() {
     $(this).remove();
-  })
+})
+
+<%= render :partial=>'plot.js.erb' %>
+
+// update the plot
+flot_transaction_by_date();

@@ -1,3 +1,9 @@
+<%= render :partial=>'plot' %>
+
+// update the plot
+flot_transaction_by_date();
+
+// update the table
 <% if @transaction.errors.any? %>
   $(".help-inline").remove();
   $('div.error > input').unwrap();
@@ -7,8 +13,14 @@
     $("#" + field_id).after('<span class="help-inline">&nbsp;<%= error[1].join(',') %></span>');
   <% end -%>
 <% else %>
-  $('#new-transaction-modal').modal('hide');
+  $('#new-transaction-modal').modal('toggle');
   $('#new-transaction-modal').remove();
+
+  // XXX trick to make it work, I don't know why the backdrop isn't removed
+  $('body').removeClass("modal-open");
+  $('div.modal-backdrop.fade.in').remove();
+
   $('#transaction_<%= @transaction.id %>').replaceWith('<%= escape_javascript(render :partial=>"transaction", :object=>@transaction) %>');
   $('#transaction_<%= @transaction.id %> > td').effect("highlight", {}, 2000);
 <% end %>
+

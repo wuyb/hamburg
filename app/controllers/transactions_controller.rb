@@ -5,18 +5,7 @@ class TransactionsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @days = days params
-    @start_date = start_date params
-    @end_date = end_date params
-    @by = params[:by].nil? ? 'all' : params[:by]
-
-#    if !params[:by].nil? || !params
-      @transactions = current_user.transactions.since(@start_date).until(@end_date)
-      @paged_transactions = current_user.transactions.since(@start_date).until(@end_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
-#    else
-#      @transactions = current_user.transactions
-#      @paged_transactions = current_user.transactions.order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
-#    end
+    prepare_data
 
     respond_to do |format|
       format.html
@@ -78,6 +67,8 @@ class TransactionsController < ApplicationController
       @transaction.to_account = Account.find_by_id(params[:transaction][:to_account])
     end
 
+    prepare_data
+
     respond_to do |format|
       if @transaction.update_attributes(params[:transaction].except(:account_id).except(:transaction_category).except(:to_account))
         format.js
@@ -95,6 +86,8 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find_by_id(params[:id])
     @transaction.destroy
 
+    prepare_data
+
     respond_to do |format|
       format.js
       format.html { redirect_to accounts_url }
@@ -103,6 +96,16 @@ class TransactionsController < ApplicationController
   end
 
   private
+
+  def prepare_data
+    @days = days params
+    @by = params[:by].nil? ? "all" : params[:by]
+    @start_date = start_date params
+    @end_date = end_date params
+
+    @transactions = current_user.transactions.since(@start_date).until(@end_date)
+    @paged_transactions = current_user.transactions.since(@start_date).until(@end_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
+  end
 
   def sort_column
     Transaction.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
