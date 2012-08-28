@@ -42,7 +42,7 @@ class Transaction < ActiveRecord::Base
 
   def update_account
     account.reload
-    to_account.reload
+    to_account.reload unless to_account.nil?
 
     if transaction_type != 0
       account.balance = account.balance + transaction_type * amount
