@@ -31,7 +31,7 @@ module TransactionsHelper
         next
       end
       day[:count] = day[:count] + 1
-      day[:total] = day[:total] + t.amount
+      day[:total] = day[:total] + t.account.currency.to_default_currency(t.amount)
 
       if t.transaction_type == 1
         transactions_by_day[:income][time] = day
@@ -56,7 +56,7 @@ module TransactionsHelper
         next
       end
       category[:count] = category[:count] + 1
-      category[:total] = category[:total] + t.amount
+      category[:total] = category[:total] + t.account.currency.to_default_currency(t.amount)
 
       if t.transaction_type == 1
         transactions_by_category[:income][t.transaction_category.name] = category

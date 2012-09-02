@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
 
-  attr_accessible :balance, :interest_rate, :max_credit, :name, :category
+  attr_accessible :balance, :interest_rate, :max_credit, :name, :category, :currency
 
   validates :name, :presence => true, :allow_blank => false
   validates :category, :presence => true
@@ -10,6 +10,7 @@ class Account < ActiveRecord::Base
 
   belongs_to  :user
   has_many    :transactions, :dependent => :destroy
+  belongs_to  :currency
 
   after_initialize :init
 

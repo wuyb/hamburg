@@ -2,6 +2,7 @@
   <td><%= account.category %></td>
   <td><%= account.name %></td>
   <td><%= account.balance %></td>
+  <td><%= account.currency.code %></td>
   <td>
     <% if account.category != "现金" %>
       <%= account.interest_rate %>

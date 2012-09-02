@@ -18,7 +18,8 @@
     </div>
     <div class="field">
       <%= f.label :transaction_type %>
-      <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"], ["转帐", "0"]], @transaction.transaction_type) %>
+      <!-- disable the transfer option for now because it makes less sense and it introduces many problems -->
+      <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"]], @transaction.transaction_type) %>
     </div>
     <div class="field" id="transaction_to_account_field" style="display:none">
       <%= f.label :to_account %>

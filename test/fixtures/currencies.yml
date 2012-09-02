@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  desc: MyString
+  rate_to_usd: 1.5
+
+two:
+  code: MyString
+  desc: MyString
+  rate_to_usd: 1.5

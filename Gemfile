@@ -23,3 +23,6 @@ gem 'jquery-rails'
 gem 'therubyracer'
 gem 'nokogiri'
 gem 'kaminari'
+
+gem 'rufus-scheduler'
+gem 'eventmachine'

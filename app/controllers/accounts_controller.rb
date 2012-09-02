@@ -29,8 +29,9 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = Account.new(params[:account])
+    @account = Account.new(params[:account].except('currency'))
     @account.user = current_user
+    @account.currency = Currency.find_by_id(params[:account][:currency].to_i)
 
     respond_to do |format|
       if @account.save

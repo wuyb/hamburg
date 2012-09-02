@@ -24,6 +24,10 @@
       <%= f.text_field :balance %>
     </div>
     <div class="field">
+      <%= f.label :currency %>
+      <%= f.select :currency, Currency.all.collect {|p| [ p.code, p.id ]}, {:selected=>@account.currency.nil? ? 31 : @account.currency.id} %>
+    </div>
+    <div class="field">
       <%= f.label :interest_rate, :class=>"account-info" %><span class="badge badge-success" id="account_interest_rate_info" title="利率" data-content="年化利率">i</span><br/>
       <%= f.text_field :interest_rate %>
     </div>

@@ -13,6 +13,7 @@ cn:
         balance: "帐户余额："
         interest_rate: "利率："
         max_credit: "额度："
+        currency: "币种："
       transaction:
         transaction_category: "类别："
         transaction_type: "类型："
