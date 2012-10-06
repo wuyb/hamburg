@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  name: MyString
+  company: MyString
+  unit_value: 1.5
+  unit_value_total: 1.5
+  increment_rate: 1.5
+  increment_value: 1.5
+  managers: MyString
+  open: false
+
+two:
+  code: MyString
+  name: MyString
+  company: MyString
+  unit_value: 1.5
+  unit_value_total: 1.5
+  increment_rate: 1.5
+  increment_value: 1.5
+  managers: MyString
+  open: false
