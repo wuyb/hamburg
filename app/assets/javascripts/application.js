@@ -14,8 +14,6 @@
 //= require flot/jquery.flot
 //= require jquery_ujs
 //= require_tree .
-//= require jquery.ui.all
-//= require twitter/bootstrap
 
 function formatDate(d, fmt) {
     if (typeof d.strftime == "function") {
