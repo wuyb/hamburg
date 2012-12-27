@@ -21,8 +21,10 @@ test:
   encoding: utf8
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: mysql2
+  database: hamburg
   pool: 5
   timeout: 5000
   encoding: utf8
+  username: hamburg
+  password: Salzburg10)
