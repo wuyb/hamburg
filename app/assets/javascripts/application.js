@@ -10,12 +10,12 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+//= require jquery.ui.all
 //= require jquery
 //= require flot/jquery.flot
 //= require jquery_ujs
 //= require_tree .
-//= require jquery.ui.all
-//= require twitter/bootstrap
+//= require_self
 
 function formatDate(d, fmt) {
     if (typeof d.strftime == "function") {

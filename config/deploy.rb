@@ -14,7 +14,8 @@ set :deploy_to, "/home/ywu/capistrano"
 set :user, "ywu"
 set :password, "Katrina10)"
 set :scm_username, "wuyb"
-set :use_sudo, false
+set :scm_password, "Katrina10)"
+set :use_sudo, true
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
