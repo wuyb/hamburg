@@ -7,7 +7,7 @@ development:
   adapter: mysql2
   database: hamburg_dev
   username: root
-  password: password
+  password:
   encoding: utf8
 
 # Warning: The database defined as "test" will be erased and

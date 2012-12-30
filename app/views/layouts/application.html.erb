@@ -1,41 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>博盛理财</title>
+  <head>
+    <title>Project Hamburg</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= csrf_meta_tags %>
+  </head>
 
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= javascript_include_tag "jquery.ui.datepicker-zh-CN" %>
-  <%= javascript_include_tag "flot/jquery.flot" %>
-  <%= javascript_include_tag "flot/jquery.flot.time" %>
-  <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="flot/excanvas.min.js"></script><![endif]-->
-  <%= csrf_meta_tags %>
-</head>
-<body>
+  <body>
 
-  <div class="container">
-   <div class="page-header">
-    <div class="row">
-      <div class="span6"><h1>博盛理财</h1></div>
-      <% if user_signed_in? %>
-        <div class="span1 offset4"><span style="float: right"><%= current_user.email %></span></div>
-        <div class="span1"><%= link_to "退出", destroy_user_session_path, :method=>:delete, :class=>"btn btn-primary", :style=>"float: right" %></div>
-      <% else %>
-        <div class="span1 offset4"><%= link_to "登录", new_user_session_path, :class=>"btn", :style=>"float: right" %></div>
-        <div class="span1"><%= link_to "注册", new_user_registration_path, :class=>"btn btn-primary", :style=>"float: right" %></div>
-      <% end %>
+    <div id="wrap">
+        <div class="navbar navbar-static-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <ul class="nav">
+                <li><a href="#">财经咨询</a></li>
+                <li><a href="#">理财知识</a></li>
+              </ul>
+              <ul class="nav pull-right">
+                 <% if user_signed_in? %>
+                    <li>
+                      <a href="#">我的财务</a>
+                    </li>
+                    <li>
+                      <a href="#">记账</a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a href="#">个人信息</a>
+                          </li>
+                          <li>
+                            <a href="#">设置</a>
+                          </li>
+                          <li class="divider"></li>
+                          <li>
+                            <%= link_to "退出", destroy_user_session_path, :method=>:delete %>
+                          </li>
+                        </ul>
+                    </li>
+                 <% else %>
+                    <li><%= link_to "登录", new_user_session_path %></li>
+                 <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <%= yield %>
+      <div id="push"></div>
     </div>
-  </div>
 
+    <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span1 offset2"><a href="#">关于我们</a></div>
+          <div class="span1 offset1"><a href="#">隐私条款</a></div>
+          <div class="span1 offset1"><a href="#">联系我们</a></div>
+          <div class="span3 offset1">北京xx科技发展有限公司</div>
+        </div>
+      </div>
+    </div>
 
-<%= yield %>
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "jquery.ui.datepicker-zh-CN" %>
+    <%= javascript_include_tag "flot/jquery.flot" %>
+    <%= javascript_include_tag "flot/jquery.flot.time" %>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="flot/excanvas.min.js"></script><![endif]-->
 
-<div class="row">
-  <div class="span1 offset2"><a href="#">关于我们</a></div>
-  <div class="span1 offset1"><a href="#">隐私条款</a></div>
-  <div class="span1 offset1"><a href="#">联系我们</a></div>
-  <div class="span3 offset1">北京博盛科技发展有限公司</div>
-</div>
-
-</body>
+  </body>
 </html>
