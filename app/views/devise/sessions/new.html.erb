@@ -1,4 +1,8 @@
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html=>{:class=>"well"}) do |f| %>
+<br/> 
+<div class="row-fluid" style="margin-top:50px">
+  <div class="span4 offset3">
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name) ) do |f| %>
+<!--
     <div class="row">
       <div class="span2">
         <h2>登录</h2>
@@ -10,7 +14,7 @@
         <%= link_to "使用腾讯微博登录", user_omniauth_authorize_path(:weibo), :class=>"btn" %><br/><br/>
       </div>
     </div>
-
+-->
     <% if flash[:alert] %>
     <div class="alert alert-error">
       <button class="close" data-dismiss="alert">×</button>
@@ -18,15 +22,34 @@
     </div>
     <% end %>
 
-  <p><%= f.label :email %>
-  <%= f.email_field :email %></p>
+        <div class="row-fluid">
+          <div class="span4">
+            <h2>Project<br/>Hamburg</h2>
+          </div>
+          <div class="span8" style="margin-top:10px">
+            <p><%= f.email_field :email, :placeholder=>"电子邮箱", :class=>"input-100" %></p>
+            <p><%= f.password_field :password, :placeholder=>"密码", :class=>"input-100" %></p>
+            <p>
+              <div class="row-fluid">
+                <div class="span4">
+                  <%= button_tag(type: 'submit', class: "btn btn-primary btn-large") do %>
+                    <i class="icon-ok icon-white"></i> 登 录
+                  <% end %>
+                </div>
+                <div class="span3 offset1" style="margin-top:10px;">
+                  <% if devise_mapping.rememberable? -%>
+                    <div class="pull-right"><label class="checkbox"><%= f.check_box :remember_me %>记住我</label></div>
+                  <% end -%>
+                </div>
+                <div class="span4" style="margin-top:12px; text-align:right">
+                    <a href="#">忘记密码?</a>
+                </div>
+              </div>
+            </p>
+          </div>
+        </div>
 
-  <p><%= f.label :password %>
-  <%= f.password_field :password %></p>
 
-  <% if devise_mapping.rememberable? -%>
-    <p><label class="checkbox"><%= f.check_box :remember_me %>记住我</label></p>
-  <% end -%>
-
-  <p><%= f.submit "确 定", :class=>"btn btn-primary btn-large" %></p>
 <% end %>
+  </div>
+</div>

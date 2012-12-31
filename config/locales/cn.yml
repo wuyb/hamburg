@@ -29,6 +29,7 @@ cn:
           attributes:
             email:
               blank: "请输入电子邮箱"
+              taken: "邮箱已被注册"
             password:
               blank: "请输入密码"
               confirmation: "密码不匹配"

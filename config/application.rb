@@ -74,9 +74,9 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
             html = %(<div class="control-group error">#{e}</div>).html_safe
         elsif e.node_name.eql? 'input'
             if instance.error_message.kind_of?(Array)
-            html = %(<div class="control-group error">#{html_tag}<span class="help-inline">&nbsp;#{instance.error_message.join(',')}</span></div>).html_safe
+            html = %(<div class="control-group error">#{html_tag}<br/><span class="help-inline">&nbsp;#{instance.error_message.join(',')}</span></div>).html_safe
         else
-            html = %(<div class="control-group error">#{html_tag}<span class="help-inline">&nbsp;#{instance.error_message}</span></div>).html_safe
+            html = %(<div class="control-group error">#{html_tag}<br/><span class="help-inline">&nbsp;#{instance.error_message}</span></div>).html_safe
         end
     end
     end

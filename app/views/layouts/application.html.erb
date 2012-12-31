@@ -10,44 +10,51 @@
   <body>
 
     <div id="wrap">
-        <div class="navbar navbar-static-top">
-          <div class="navbar-inner">
-            <div class="container">
-              <ul class="nav">
-                <li><a href="#">财经咨询</a></li>
-                <li><a href="#">理财知识</a></li>
-              </ul>
-              <ul class="nav pull-right">
-                 <% if user_signed_in? %>
-                    <li>
-                      <a href="#">我的财务</a>
-                    </li>
-                    <li>
-                      <a href="#">记账</a>
-                    </li>
-                    <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                          <li>
-                            <a href="#">个人信息</a>
-                          </li>
-                          <li>
-                            <a href="#">设置</a>
-                          </li>
-                          <li class="divider"></li>
-                          <li>
-                            <%= link_to "退出", destroy_user_session_path, :method=>:delete %>
-                          </li>
-                        </ul>
-                    </li>
-                 <% else %>
-                    <li><%= link_to "登录", new_user_session_path %></li>
-                 <% end %>
-              </ul>
-            </div>
+
+      <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <ul class="nav">
+              <li><a class="brand" href="/">Hamburg</a></li>
+              <!--
+              <li><a href="#">财经咨询</a></li>
+              <li><a href="#">理财知识</a></li>
+              -->
+            </ul>
+            <ul class="nav pull-right">
+               <% if user_signed_in? %>
+                  <li>
+                    <a href="#">我的财务</a>
+                  </li>
+                  <li>
+                    <a href="#">记账</a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %><b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="#">个人信息</a>
+                        </li>
+                        <li>
+                          <a href="#">设置</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                          <%= link_to "退出", destroy_user_session_path, :method=>:delete %>
+                        </li>
+                      </ul>
+                  </li>
+               <% else %>
+                  <li><%= link_to "登录", new_user_session_path %></li>
+                  <li><%= link_to "注册", new_user_registration_path %></li>
+               <% end %>
+            </ul>
           </div>
         </div>
+      </div>
+
       <%= yield %>
+
       <div id="push"></div>
     </div>
 
