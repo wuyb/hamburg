@@ -1,6 +1,49 @@
 
-<%= link_to "修改帐户", edit_account_path(@account), :remote=>true %>
-  <td><%= link_to '删除', @account, method: :delete, :remote=>true, data: { confirm: '确定要删除吗？' } %></td>
+<div class="row-fluid">
+  <div class="span6">
+    <h3>帐户信息 - <%= @account.name %></h3>
+  </div>
+  <div class="span1" style="margin-top:25px">
+    <%= link_to edit_account_path(@account), :remote=>true do %>
+      <i class="icon-pencil"></i> <div style="font-size:11px;display:inline">修改</div>
+    <% end %>
+  </div>
+  <div class="span1" style="margin-top:25px">
+    <%= link_to @account, method: :delete, :remote=>true, data: { confirm: '确定要删除吗？' } do %>
+      <i class="icon-remove"></i> <div style="font-size:11px;display:inline">删除</div>
+    <% end %>
+  </div>
+  <div class="span2 offset2" style="margin-top:15px">
+    <div style="float:right">
+      <%= link_to new_account_transaction_path(@account), :remote=>true, :class=>"btn btn-inverse", :account=>@account do %>
+        <i class="icon-plus-sign icon-white"></i> <div style="font-size:20px;display:inline">记帐</div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<br/>
+<div class="row-fluid">
+  <div class="span4">
+    <b>余额 : <%= @account.balance %></b>
+  </div>
+  <div class="span4">
+    <b>币种 : <%= @account.currency.code %></b>
+  </div>
+  <div class="span4">
+    <b>立户时间 : <%= l @account.created_at %></b>
+  </div>
+</div>
+
+<% if @account.category === "信用帐户" %>
+<div class="row-fluid">
+  <div class="span4">
+    额度 : <%= @account.max_credit %>
+  </div>
+</div>
+<% end %>
+
+<br/>
 
 <%= render :partial=>"transactions/transactions" %>
 
@@ -8,3 +51,4 @@
   $("#account_sidebar_item_<%= @account.id %>").addClass("active");
   $("#account_sidebar_current_<%= @account.id%>").show();
 </script>
+

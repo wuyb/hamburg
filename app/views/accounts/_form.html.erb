@@ -1,5 +1,5 @@
 <%= form_for(@account, :remote => true) do |f| %>
-<div class="modal hide show fade" id="myModal">
+<div class="modal hide show fade" id="new-account-modal">
 
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -12,30 +12,23 @@
 
   <div class="modal-body">
     <div class="field">
-      <%= f.label :category %>
-      <%= f.select :category, ["储蓄帐户","信用帐户","现金", "理财帐户"] %>
+      类型 : <%= f.select :category, ["储蓄帐户","信用帐户","现金", "理财帐户"] %>
     </div>
     <div class="field">
-      <%= f.label :name, :class=>"account-info" %><span class="badge badge-success" id="account_name_info" title="帐户名称" data-content="起一个好记的名字，比如“招商银行储蓄卡”">i</span><br/>
-      <%= f.text_field :name %>
+      名称 : <%= f.text_field :name, :placeholder=>"如\"招行金葵花\"", :class=>"input-80" %>
     </div>
     <div class="field">
-      <%= f.label :balance, :class=>"account-info" %><span class="badge badge-success" id="account_balance_info" title="帐户名称" data-content="不必要是准确的数额">i</span><br/>
-      <%= f.text_field :balance %>
+      余额 : <%= f.text_field :balance, :placeholder=>"帐户余额" %>
+      <%= f.select :currency, Currency.all.collect {|p| [ p.code, p.id ]}, {:selected=>@account.currency.nil? ? 31 : @account.currency.id}, :style=>"margin-left:10px" %>
     </div>
     <div class="field">
-      <%= f.label :currency %>
-      <%= f.select :currency, Currency.all.collect {|p| [ p.code, p.id ]}, {:selected=>@account.currency.nil? ? 31 : @account.currency.id} %>
-    </div>
-    <div class="field">
-      <%= f.label :interest_rate, :class=>"account-info" %><span class="badge badge-success" id="account_interest_rate_info" title="利率" data-content="年化利率">i</span><br/>
-      <%= f.text_field :interest_rate %>
+      利率 : <%= f.text_field :interest_rate %>
     </div>
     <div class="field" id="max_credit_div">
-      <%= f.label :max_credit, :class=>"account-info" %><span class="badge badge-success" id="account_max_credit_info" title="额度" data-content="请输入您该信用帐户的最大授信额度">i</span><br/>
-      <%= f.text_field :max_credit %>
+      额度 : <%= f.text_field :max_credit %>
     </div>
   </div>
+
   <div class="modal-footer">
     <a href="#" class="btn" data-dismiss="modal">取消</a>
     <% if @account.persisted? %>

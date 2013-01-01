@@ -15,7 +15,7 @@ class TransactionsController < ApplicationController
 
   def new
     @accounts = current_user.accounts
-    @account = Account.find_by_id(params[:account].to_i)
+    @account = Account.find_by_id(params[:account_id].to_i)
     @transaction = Transaction.new(:account=>@account);
 
     respond_to do |format|

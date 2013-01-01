@@ -6,7 +6,9 @@ Hamburg::Application.routes.draw do
     get '/users/auth/:provider' => 'users/omniauth_callbacks#passthru'
   end
 
-  resources :accounts
+  resources :accounts do
+    resources :transactions
+  end
   resources :transactions
 
   # The priority is based upon order of creation:

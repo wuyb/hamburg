@@ -3,20 +3,8 @@ $('#new-transaction-modal').modal('toggle');
 
 $('#transaction_created_at_value').datepicker({ altFormat: "yy-mm-dd", dateFormat: "yy年mm月dd日", altField: '#transaction_created_at', maxDate: "+0D", showButtonPanel: true});
 
-$('#transaction_account_id').bind('change', function() {
-  if ($('#transaction_transaction_type').val() == 0) {
-    $('#transaction_to_account').empty();
-    <% for account in @accounts %>
-      if ($(this).val() != <%= account.id %>) {
-        $('#transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>')
-      }
-    <% end %>
-  }
-});
-
 $('#transaction_transaction_type').bind('change', function() {
   $('#transaction_transaction_category').empty();
-  $('#transaction_to_account_field').hide();
   $('#transaction_transaction_category_field').show();
   if ($(this).val() == 1) {
     <% for category in TransactionCategory.find(:all, :conditions => "transaction_type=1") %>

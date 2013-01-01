@@ -7,11 +7,6 @@
       <%= transaction.transaction_category.name %>
     <% end %>
   </td>
-  <td>
-    <% if transaction.transaction_type == 0 %>
-      <%= transaction.to_account.name %>
-    <% end %>
-  </td>
   <td><%= l transaction.created_at %></td>
   <td><%= link_to '修改', edit_transaction_path(transaction), :remote=>true %></td>
   <td><%= link_to '删除', transaction, method: :delete, :remote=>true, data: { confirm: '确定要删除吗？' } %></td>

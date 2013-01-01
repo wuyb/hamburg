@@ -101,9 +101,9 @@
                           </li>  
                       </ul>  
                   </div> 
-            </div>
+              </div>
 
-            <script type="text/javascript">
+              <script type="text/javascript">
                 <% @accounts.each do |account| %>
                   <% if account.category === "储蓄帐户" %>
                     $("#accounts-savings-placeholder").remove();
@@ -119,19 +119,20 @@
                     $("#accounts-investment").append('<%= escape_javascript(render_sidebar_item_for account) %>');
                   <% end %>
                 <% end %>
-            </script>
+              </script>
 
-            <div class="span8">
+              <div class="span8">
                 <%= yield %>
-            </div>
+              </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <div id="new-transaction"> </div>
+      <div id="new-account"> </div>
 
     </div>
 
-    <div id="new-transaction"/>
-    <div id="new-account"/>
 
     <div id="push"></div>
     </div>

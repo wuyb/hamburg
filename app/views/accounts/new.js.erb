@@ -1,5 +1,5 @@
 $('#new-account').html($('<%= escape_javascript(render(:partial => "form", :object=>@account)) %>'))
-$('#myModal').modal('toggle');
+$('#new-account-modal').modal('toggle');
 
 $('#account_name_info').popover('show');
 $('#account_balance_info').popover('show');

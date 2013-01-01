@@ -13,40 +13,23 @@
   <div class="modal-body">
 
     <div class="field">
-      <%= f.label :account %>
-      <%= f.collection_select :account_id, @accounts, :id, :name %>
+      帐户 : <%= f.collection_select :account_id, @accounts, :id, :name %>
     </div>
     <div class="field">
-      <%= f.label :transaction_type %>
-      <!-- disable the transfer option for now because it makes less sense and it introduces many problems -->
-      <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"]], @transaction.transaction_type) %>
-    </div>
-    <div class="field" id="transaction_to_account_field" style="display:none">
-      <%= f.label :to_account %>
-      <% if @transaction.account.nil? %>
-        <%= f.collection_select :to_account, @accounts.collect {|x| x.id == @accounts[0].id ? nil : x}.compact(), :id, :name %>
-      <% else %>
-        <%= f.collection_select :to_account, @accounts.collect {|x| x.id == @transaction.account.id ? nil : x}.compact(), :id, :name %>
-      <% end %>
-    </div>
-    <div class="field" id="transaction_transaction_category_field">
-      <%= f.label :transaction_category %>
+      类型 : <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"]], @transaction.transaction_type) %>
       <%= f.collection_select :transaction_category, 
                               TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : 1).to_s),
                               :id, :name %>
     </div>
     <div class="field">
-      <%= f.label :amount %>
-      <%= f.text_field :amount %>
+      数额 : <%= f.text_field :amount %>
     </div>
     <div class="field">
-      <%= f.label :created_at %>
-      <input type="input" value="<%= l @transaction.created_at %>" id="transaction_created_at_value" />
+      日期 : <input type="input" value="<%= l @transaction.created_at %>" id="transaction_created_at_value" />
       <%= f.hidden_field :created_at, :value=>@transaction.created_at %>
     </div>
-    <div class="field">
-      <%= f.label :description %>
-      <%= f.text_area :description, :rows => 5 %>
+    <div class="field" style="margin-top:20px">
+      备注 : <%= f.text_area :description, :rows => 5, :columns=>10, :placeholder=>"备注" %>
     </div>
   </div>
   <div class="modal-footer">
