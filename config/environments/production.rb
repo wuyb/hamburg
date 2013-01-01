@@ -72,4 +72,6 @@ Hamburg::Application.configure do
     :location => '/usr/sbin/sendmail',
     :arguments => '-i -t'
   }
+
+  config.action_controller.relative_url_root = "/hamburg"
 end
