@@ -12,7 +12,7 @@
 
   <div class="modal-body">
     <div class="field">
-      类型 : <%= f.select :category, ["储蓄帐户","信用帐户","现金", "理财帐户"] %>
+      类型 : <%= f.select :category, [["储蓄帐户",'1'],["信用帐户",'3'],["现金",'2'], ["理财帐户", '4']] %>
     </div>
     <div class="field">
       名称 : <%= f.text_field :name, :placeholder=>"如\"招行金葵花\"", :class=>"input-80" %>

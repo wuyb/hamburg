@@ -105,16 +105,16 @@
 
               <script type="text/javascript">
                 <% @accounts.each do |account| %>
-                  <% if account.category === "储蓄帐户" %>
+                  <% if account.category === '1' %>
                     $("#accounts-savings-placeholder").remove();
                     $("#accounts-savings").append('<%= escape_javascript(render_sidebar_item_for account) %>');
-                  <% elsif account.category === "信用帐户" %>
-                    $("#accounts-credit-placeholder").remove();
-                    $("#accounts-credit").append('<%= escape_javascript(render_sidebar_item_for account) %>');
-                  <% elsif account.category === "现金" %>
+                  <% elsif account.category === '2' %>
                     $("#accounts-cash-placeholder").remove();
                     $("#accounts-cash").append('<%= escape_javascript(render_sidebar_item_for account) %>');
-                  <% elsif account.category === "理财帐户" %>
+                  <% elsif account.category === '3' %>
+                    $("#accounts-credit-placeholder").remove();
+                    $("#accounts-credit").append('<%= escape_javascript(render_sidebar_item_for account) %>');
+                  <% elsif account.category === '4' %>
                     $("#accounts-investment-placeholder").remove();
                     $("#accounts-investment").append('<%= escape_javascript(render_sidebar_item_for account) %>');
                   <% end %>
