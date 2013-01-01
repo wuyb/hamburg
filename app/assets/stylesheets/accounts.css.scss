@@ -15,3 +15,25 @@
   display:inline;
   margin-right: 5px;
 }
+
+.accounts-sidebar {
+  padding-left:5px;
+  padding-right:5px;
+  font-size: 16px;
+}
+
+.accounts-sidebar-header {
+  font-size: 16px;
+}
+
+.accounts-sidebar .nav-header {
+  font-size: 20px;
+}
+
+.accounts-sidebar li .active a {
+  color: red;
+}
+
+.accounts-sidebar li .active {
+  color: red;
+}

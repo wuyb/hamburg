@@ -9,15 +9,4 @@
 <% else %>
   $('#new-transaction-modal').modal('hide');
   $('#new-transaction-modal').remove();
-  if ($('#accounts-table').length > 0) {
-    $('#account_<%= @transaction.account.id %>').replaceWith('<%= escape_javascript(render :partial=>@transaction.account) %>');
-    $('#account_<%= @transaction.account.id %> > td').effect("highlight", {}, 2000);
-    <% if !@transaction.to_account.nil? %>
-      $('#account_<%= @transaction.to_account.id %>').replaceWith('<%= escape_javascript(render :partial=>@transaction.to_account) %>');
-      $('#account_<%= @transaction.to_account.id %> > td').effect("highlight", {}, 2000);
-    <% end %>
-  } else if ($('#transactions-table').length > 0) {
-    $('#transactions-table').append('<%= escape_javascript(render :partial=>"transaction", :object=>@transaction) %>');
-    $('#transaction_<%= @transaction.id %> > td').effect("highlight", {}, 2000);
-  }
 <% end %>

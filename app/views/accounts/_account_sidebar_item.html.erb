@@ -1,0 +1,13 @@
+<li id="account_sidebar_item_<%= account.id%>">
+  <div class="row-fluid">
+    <div class="span6" style="margin-top:-20px;margin-bottom:-5px">
+      <%= link_to account.name, account %>
+    </div>
+    <div class="span4 offset1" style="margin-top:-20px;margin-bottom:-5px">
+      <%= account.balance %>
+    </div>
+    <div class="span1" style="margin-top:-20px;margin-bottom:-5px">
+      <i class="icon-play" id="account_sidebar_current_<%= account.id%>" style="display:none;"></i>
+    </div>
+  </div>
+</li>

@@ -37,7 +37,7 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       if @transaction.save!
-        format.js
+        format.js { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
         format.json { render json: @transaction, status: :created, location: @transaction }
       else
         format.js
@@ -71,7 +71,7 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       if @transaction.update_attributes(params[:transaction].except(:account_id).except(:transaction_category).except(:to_account))
-        format.js
+        format.js  { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
         format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
         format.json { head :no_content }
       else
@@ -84,12 +84,13 @@ class TransactionsController < ApplicationController
 
   def destroy
     @transaction = Transaction.find_by_id(params[:id])
+    @account = @transaction.account
     @transaction.destroy
 
     prepare_data
 
     respond_to do |format|
-      format.js
+      format.js  { render :js => "window.location.href = '#{account_path(@account)}'" }
       format.html { redirect_to accounts_url }
       format.json { head :no_content }
     end

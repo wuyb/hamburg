@@ -9,6 +9,4 @@
 <% else %>
   $('#myModal').modal('hide');
   $('#myModal').remove();
-  $('tr#account_<%= @account.id %>').replaceWith('<%= escape_javascript(render :partial=>@account) %>');
-  $('#account_<%= @account.id %> > td').effect("highlight", {}, 2000);
 <% end %>
