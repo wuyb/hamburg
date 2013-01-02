@@ -4,11 +4,12 @@
   <td><%= ["支出","转帐","收入"][transaction.transaction_type + 1] %></td>
   <td><%= transaction.transaction_category.name %></td>
   <td><%= l transaction.created_at %></td>
-  <td><%= transaction.tag_list %></td>
-  <td style="min-width:60px">
-    <a href="#" rel="tooltip" title="<%= transaction.description %>">
-      <i class="icon-th-large"></i><div style="font-size:11px;display:inline"></div>
-    </a>
+  <td><%= transaction.description %>
+      <% if !transaction.tag_list.empty? %>
+        <span class="label label-info pull-left" style="color:white;margin-left:0px;font-size:1em"><%= transaction.tag_list %></span>
+      <% end %>
+  </td>
+  <td style="min-width:30px">
     &nbsp;
     <%= link_to edit_transaction_path(transaction), :remote=>true, :rel=>"tooltip", :title=>"修改" do %>
       <i class="icon-pencil"></i><div style="font-size:11px;display:inline"></div>

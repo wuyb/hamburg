@@ -2,13 +2,13 @@
     <div class="span12">
         <table class="table table-hover" id="transactions-table">
             <tr>
-                <th style="min-width:70px"><%= sortable 'account_id', '帐户' %></th>
-                <th style="min-width:30px"><%= sortable 'amount', '金额' %></th>
+                <th style="min-width:100px"><%= sortable 'account_id', '帐户' %></th>
+                <th style="min-width:50px"><%= sortable 'amount', '金额' %></th>
                 <th style="min-width:30px"><%= sortable 'transaction_type', '类型' %></th>
                 <th style="min-width:30px"><%= sortable 'transaction_category_id', '类别' %></th>
-                <th style="min-width:30px"><%= sortable 'created_at', '日期' %></th>
-                <th style="min-width:50px"><%= '标签' %></th>
-                <th style="min-width:30px"></th>
+                <th style="min-width:100px"><%= sortable 'created_at', '日期' %></th>
+                <th style="min-width:80px"><%= '详细信息' %></th>
+                <th style="min-width:50px"></th>
             </tr>
             <% @transactions.each do |transaction| %>
                 <%= render :partial=>transaction %>
