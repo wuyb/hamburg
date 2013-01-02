@@ -24,25 +24,21 @@
       
       <div>
         <div class="row-fluid">
-          <div class="span4">
+          <div class="span4" style="min-width:120px">
             <h2>Project<br/>Hamburg</h2>
           </div>
-          <div class="span8" style="margin-top:10px">
+          <div class="span8" style="margin-top:10px;min-width:250px">
             <p><%= f.email_field :email, :placeholder=>"电子邮箱", :class=>"input-100" %></p>
             <p><%= f.password_field :password, :placeholder=>"密码", :class=>"input-100" %></p>
             <p><%= f.password_field :password_confirmation, :placeholder=>"密码确认", :class=>"input-100" %></p>
-            <p>
+            <p><div style="text-align:left;margin-top:20px">我同意遵守<a href="#">约定条款</a></div></p>
               <div class="row-fluid">
-                  <div class="span4">
+                  <div class="span2" style="min-width:90px">
                     <%= button_tag(type: 'submit', class: "btn btn-primary btn-large") do %>
                       <i class="icon-ok icon-white"></i> 注 册
                     <% end %>
                   </div>
-                  <div class="span8">
-                    <div style="text-align:right;margin-top:20px">注册意味着您遵守<a href="#">我们的条款</a></div>
-                  </div>
               </div>
-            </p>
           </div>
         </div>
       </div>

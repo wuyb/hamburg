@@ -2,7 +2,8 @@
 <html>
   <head>
     <title>Project Hamburg</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <%= stylesheet_link_tag    "bootstrap-responsive", :media => "all" %>
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= csrf_meta_tags %>
   </head>
@@ -11,38 +12,44 @@
 
     <div id="wrap">
 
-      <div class="navbar navbar-static-top">
+      <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-          <div class="container">
-            <ul class="nav">
-              <li><a class="brand" href="/">Hamburg</a></li>
-            </ul>
-            <ul class="nav pull-right">
-               <% if user_signed_in? %>
-                  <li><a href="#">我的目标</a></li>
-                  <li><a href="#">我的预算</a></li>
-                  <li><%= link_to "我的财务", accounts_path %></li>
-                  <li><%= link_to '记帐', new_transaction_path, :remote=>true %></li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %><b class="caret"></b></a>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a href="#">个人信息</a>
-                        </li>
-                        <li>
-                          <a href="#">设置</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                          <%= link_to "退出", destroy_user_session_path, :method=>:delete %>
-                        </li>
-                      </ul>
-                  </li>
-               <% else %>
-                  <li><%= link_to "登录", new_user_session_path %></li>
-                  <li><%= link_to "注册", new_user_registration_path %></li>
-               <% end %>
-            </ul>
+          <div class="container-fluid">
+            <div class="row-fluid">
+              <div class="span3">
+                <ul class="nav">
+                  <li><a class="brand" href="/" style="margin-left:10px">Hamburg</a></li>
+                </ul>
+              </div>
+              <div class="pull-right">
+                <ul class="nav">
+                   <% if user_signed_in? %>
+                      <li><a href="#">我的目标</a></li>
+                      <li><a href="#">我的预算</a></li>
+                      <li><%= link_to "我的财务", accounts_path %></li>
+                      <li><%= link_to '记帐', new_transaction_path, :remote=>true %></li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %><b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                            <li>
+                              <a href="#">个人信息</a>
+                            </li>
+                            <li>
+                              <a href="#">设置</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                              <%= link_to "退出", destroy_user_session_path, :method=>:delete %>
+                            </li>
+                          </ul>
+                      </li>
+                   <% else %>
+                      <li><%= link_to "登录", new_user_session_path %></li>
+                      <li><%= link_to "注册", new_user_registration_path %></li>
+                   <% end %>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -54,12 +61,12 @@
     </div>
 
     <div id="footer">
-      <div class="container">
-        <div class="row">
-          <div class="span1 offset2"><a href="#">关于我们</a></div>
-          <div class="span1 offset1"><a href="#">隐私条款</a></div>
-          <div class="span1 offset1"><a href="#">联系我们</a></div>
-          <div class="span3 offset1">北京xx科技发展有限公司</div>
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <div class="span2 offset2"><a href="#">关于我们</a></div>
+          <div class="span2"><a href="#">隐私条款</a></div>
+          <div class="span2"><a href="#">联系我们</a></div>
+          <div class="span3">北京xx科技发展有限公司</div>
         </div>
       </div>
     </div>
