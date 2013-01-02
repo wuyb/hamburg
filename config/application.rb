@@ -1,3 +1,4 @@
+# encoding: utf-8
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -63,8 +64,12 @@ module Hamburg
     config.assets.paths << "#{Rails.root}/app/assets/webfonts"
 
     config.app_generators.stylesheet_engine :less
+
+    ActsAsTaggableOn.delimiter = [",", "，"]
+
+  end
 end
-end
+
 
 ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html = %(<div class="field_with_errors">#{html_tag}</div>).html_safe
