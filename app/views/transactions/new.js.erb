@@ -3,6 +3,14 @@ $('#new-transaction-modal').modal('toggle');
 
 $('#transaction_created_at_value').datepicker({ altFormat: "yy-mm-dd", dateFormat: "yy年mm月dd日", altField: '#transaction_created_at', maxDate: "+0D", showButtonPanel: true});
 
+$('#toggle-description-link').bind('click', function() {
+  if ($('#transaction-description').css("display") == "none") {
+    $('#transaction-description').show();    
+  } else {
+    $('#transaction-description').hide(); 
+  }
+});
+
 $('#transaction_transaction_type').bind('change', function() {
   $('#transaction_transaction_category').empty();
   $('#transaction_transaction_category_field').show();

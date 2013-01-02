@@ -148,6 +148,12 @@
       </div>
     </div>
 
+    <%= javascript_include_tag "twitter/bootstrap/tooltip" %>
+    <script type="text/javascript">
+        $("[rel=tooltip]").tooltip();
+        $("[rel=nofollow]").tooltip();
+    </script>
+
     <%= javascript_include_tag "application" %>
     <%= javascript_include_tag "jquery.ui.datepicker-zh-CN" %>
     <%= javascript_include_tag "flot/jquery.flot" %>

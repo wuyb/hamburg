@@ -2,12 +2,20 @@
   <td><%= transaction.account.name %></td>
   <td><%= transaction.amount %></td>
   <td><%= ["支出","转帐","收入"][transaction.transaction_type + 1] %></td>
-  <td>
-    <% if transaction.transaction_type != 0 %>
-      <%= transaction.transaction_category.name %>
+  <td><%= transaction.transaction_category.name %></td>
+  <td><%= l transaction.created_at %></td>
+  <td><%= transaction.tag_list %></td>
+  <td style="min-width:60px">
+    <a href="#" rel="tooltip" title="<%= transaction.description %>">
+      <i class="icon-th-large"></i><div style="font-size:11px;display:inline"></div>
+    </a>
+    &nbsp;
+    <%= link_to edit_transaction_path(transaction), :remote=>true, :rel=>"tooltip", :title=>"修改" do %>
+      <i class="icon-pencil"></i><div style="font-size:11px;display:inline"></div>
+    <% end %>
+    &nbsp;
+    <%= link_to transaction, method: :delete, data: { confirm: '确定要删除吗？' }, :remote=>true, :title=>"删除" do %>
+      <i class="icon-remove"></i><div style="font-size:11px;display:inline"></div>
     <% end %>
   </td>
-  <td><%= l transaction.created_at %></td>
-  <td><%= link_to '修改', edit_transaction_path(transaction), :remote=>true %></td>
-  <td><%= link_to '删除', transaction, method: :delete, :remote=>true, data: { confirm: '确定要删除吗？' } %></td>
 </tr>

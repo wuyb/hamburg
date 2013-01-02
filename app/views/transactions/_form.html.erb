@@ -28,8 +28,12 @@
       日期 : <input type="input" value="<%= l @transaction.created_at %>" id="transaction_created_at_value" />
       <%= f.hidden_field :created_at, :value=>@transaction.created_at %>
     </div>
-    <div class="field" style="margin-top:20px">
-      备注 : <%= f.text_area :description, :rows => 5, :columns=>10, :placeholder=>"备注" %>
+    <div class="field" style="margin-top:20px;">
+      标签 : <%= f.text_field :tag_list, :placeholder=>"用逗号分隔", :class=>"input-80" %>
+      <a href="#" id="toggle-description-link" title="添加备注"><i class="icon-th-large"></i></a>
+    </div>
+    <div class="field" style="display:none" id="transaction-description">
+      备注 : <%= f.text_area :description, :size => "20x5", :placeholder=>"备注", :class=>"input-80" %>
     </div>
   </div>
   <div class="modal-footer">
@@ -40,6 +44,8 @@
       <%= f.submit "新建流水", :class=>"btn btn-primary"%>
     <% end %>
   </div>
+
 </div>
 <% end %>
+
 

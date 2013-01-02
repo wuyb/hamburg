@@ -26,3 +26,5 @@ gem 'kaminari'
 
 gem 'rufus-scheduler'
 gem 'eventmachine'
+
+gem 'acts-as-taggable-on', '~> 2.3.1'

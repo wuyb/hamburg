@@ -1,6 +1,8 @@
 # encoding: utf-8
 class Transaction < ActiveRecord::Base
-  attr_accessible :amount, :transaction_category, :description, :account, :transaction_type, :to_account, :created_at
+  attr_accessible :amount, :transaction_category, :description, :account, :transaction_type, :to_account, :created_at, :tag_list
+
+  acts_as_taggable
 
   validates :account, :presence => true
   validates :amount, :numericality => true, :allow_blank => false
