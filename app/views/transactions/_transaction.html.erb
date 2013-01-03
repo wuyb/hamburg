@@ -6,7 +6,9 @@
   <td><%= l transaction.created_at %></td>
   <td><%= transaction.description %>
       <% if !transaction.tag_list.empty? %>
-        <br/>
+        <% if transaction.description && !transaction.description.empty? %>
+          <br/>
+        <% end %>
         <% transaction.tags.each do |tag| %>
           <span class="label label-info pull-left" style="color:white;margin-left:2px;margin-top:2px;font-size:1em"><%= tag.name %></span>
         <% end %>

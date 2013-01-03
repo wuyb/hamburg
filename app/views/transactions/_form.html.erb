@@ -17,9 +17,9 @@
     </div>
     <div class="field">
       类型 : <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"]], @transaction.transaction_type) %>
-      <%= f.collection_select :transaction_category_id, 
+      <%= f.collection_select :transaction_category, 
                               TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : 1).to_s),
-                              :id, :name %>
+                              :id, :name, {:selected => @transaction.transaction_category.id} %>
     </div>
     <div class="field">
       数额 : <%= f.text_field :amount %>
