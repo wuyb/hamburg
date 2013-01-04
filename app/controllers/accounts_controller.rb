@@ -3,10 +3,26 @@ class AccountsController < ApplicationController
   helper_method :sort_column, :sort_direction
   before_filter :authenticate_user!
 
-  def index
+  def prepare_accounts
     @accounts = current_user.accounts.order(sort_column + ' ' + sort_direction)
-    @transactions = current_user.transactions
+    @accounts_by_type = {}
+    @subtotal_by_type = {}
+    @total = 0.0
+    @accounts.each do |account|
+      accounts = @accounts_by_type[account.category]
+      accounts = [] if !accounts
+      accounts << account
+      @accounts_by_type[account.category] = accounts 
+           
+      @subtotal_by_type[account.category] = (@subtotal_by_type[account.category] ? @subtotal_by_type[account.category] : 0) + account.currency.to_default_currency(account.balance)
+      @total += account.currency.to_default_currency(account.balance)
+    end
 
+  end
+
+  def index
+    prepare_accounts
+    @transactions = current_user.transactions
     respond_to do |format|
       format.html
       #format.js
@@ -15,7 +31,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @accounts = current_user.accounts.order(sort_column + ' ' + sort_direction)
+    prepare_accounts
     @account = Account.find(params[:id])
     @transactions = @account.transactions
     respond_to do |format|
