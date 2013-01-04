@@ -13,4 +13,9 @@ module ApplicationHelper
       link_to title, {:sort => column, :direction => direction}
     end
   end
+
+  def render_sidebar_item_for(account)
+    render :partial=>"accounts/account_sidebar_item", :locals => {:account => account }
+  end
+
 end

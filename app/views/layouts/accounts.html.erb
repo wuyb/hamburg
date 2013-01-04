@@ -63,13 +63,13 @@
                           </li>  
                           <li class="divider"></li>
                           <li><a href="#" data-toggle="collapse" data-target="#accounts-cash" class="accounts-sidebar-header">
-                                现金<div style="float:right"><%= number_to_currency(@subtotal_by_type['2'] ? @subtotal_by_type['2'] : 0, :unit => "&yen; ") %></div>
+                                现金<div style="float:right"><%= number_to_currency(@subtotal_by_category['2'] ? @subtotal_by_category['2'] : 0, :unit => "&yen; ") %></div>
                               </a>
                               <ul id="accounts-cash" class="collapse in">
-                                  <% if !@accounts_by_type['2'] %>
+                                  <% if !@accounts_by_category['2'] %>
                                     <li id="accounts-cash-placeholder">还没有现金帐户。<%= link_to "添加", new_account_path, :remote=>true %></li>
                                   <% else %>
-                                    <% @accounts_by_type['2'].each do |account| %>
+                                    <% @accounts_by_category['2'].each do |account| %>
                                       <%= render_sidebar_item_for account %>
                                     <% end %>
                                   <% end %>
@@ -77,12 +77,12 @@
                           </li>  
                           <li class="divider"></li>
                           <li><a href="#" data-toggle="collapse" data-target="#accounts-savings" class="accounts-sidebar-header">储蓄
-                            <div style="float:right"><%= number_to_currency(@subtotal_by_type['1'] ? @subtotal_by_type['1'] : 0, :unit => "&yen; ") %></div></a> 
+                            <div style="float:right"><%= number_to_currency(@subtotal_by_category['1'] ? @subtotal_by_category['1'] : 0, :unit => "&yen; ") %></div></a> 
                               <ul id="accounts-savings" class="collapse in">
-                                  <% if !@accounts_by_type['1'] %>
+                                  <% if !@accounts_by_category['1'] %>
                                     <li id="accounts-cash-placeholder">还没有储蓄帐户。<%= link_to "添加", new_account_path, :remote=>true %></li>
                                   <% else %>
-                                    <% @accounts_by_type['1'].each do |account| %>
+                                    <% @accounts_by_category['1'].each do |account| %>
                                       <%= render_sidebar_item_for account %>
                                     <% end %>
                                   <% end %>
@@ -90,12 +90,12 @@
                           </li>
                           <li class="divider"></li>
                           <li><a href="#" data-toggle="collapse" data-target="#accounts-credit" class="accounts-sidebar-header">信用
-                            <div style="float:right"><%= number_to_currency(@subtotal_by_type['3'] ? @subtotal_by_type['3'] : 0, :unit => "&yen; ") %></div></a> 
+                            <div style="float:right"><%= number_to_currency(@subtotal_by_category['3'] ? @subtotal_by_category['3'] : 0, :unit => "&yen; ") %></div></a> 
                               <ul id="accounts-credit" class="collapse in">
-                                  <% if !@accounts_by_type['3'] %>
+                                  <% if !@accounts_by_category['3'] %>
                                     <li id="accounts-cash-placeholder">还没有信用帐户。<%= link_to "添加", new_account_path, :remote=>true %></li>
                                   <% else %>
-                                    <% @accounts_by_type['3'].each do |account| %>
+                                    <% @accounts_by_category['3'].each do |account| %>
                                       <%= render_sidebar_item_for account %>
                                     <% end %>
                                   <% end %>
@@ -103,12 +103,12 @@
                           </li>  
                           <li class="divider"></li>
                           <li><a href="#" data-toggle="collapse" data-target="#accounts-investment" class="accounts-sidebar-header">投资
-                            <div style="float:right"><%= number_to_currency(@subtotal_by_type['4'] ? @subtotal_by_type['4'] : 0, :unit => "&yen; ") %></div></a> 
+                            <div style="float:right"><%= number_to_currency(@subtotal_by_category['4'] ? @subtotal_by_category['4'] : 0, :unit => "&yen; ") %></div></a> 
                               <ul id="accounts-investment" class="collapse in">
-                                  <% if !@accounts_by_type['4'] %>
+                                  <% if !@accounts_by_category['4'] %>
                                     <li id="accounts-cash-placeholder">还没有投资帐户。<%= link_to "添加", new_account_path, :remote=>true %></li>
                                   <% else %>
-                                    <% @accounts_by_type['4'].each do |account| %>
+                                    <% @accounts_by_category['4'].each do |account| %>
                                       <%= render_sidebar_item_for account %>
                                     <% end %>
                                   <% end %>
@@ -135,10 +135,6 @@
       <div id="new-transaction"> </div>
       <div id="new-account"> </div>
 
-    </div>
-
-
-    <div id="push"></div>
     </div>
 
     <div id="footer">

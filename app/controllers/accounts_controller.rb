@@ -1,39 +1,21 @@
 class AccountsController < ApplicationController
+
   layout  "accounts"
-  helper_method :sort_column, :sort_direction
+
   before_filter :authenticate_user!
-
-  def prepare_accounts
-    @accounts = current_user.accounts.order(sort_column + ' ' + sort_direction)
-    @accounts_by_type = {}
-    @subtotal_by_type = {}
-    @total = 0.0
-    @accounts.each do |account|
-      accounts = @accounts_by_type[account.category]
-      accounts = [] if !accounts
-      accounts << account
-      @accounts_by_type[account.category] = accounts 
-           
-      @subtotal_by_type[account.category] = (@subtotal_by_type[account.category] ? @subtotal_by_type[account.category] : 0) + account.currency.to_default_currency(account.balance)
-      @total += account.currency.to_default_currency(account.balance)
-    end
-
-  end
 
   def index
     prepare_accounts
-    @transactions = current_user.transactions
+    @transactions = current_user.transactions.where("transactions.created_at >= ?", Date.today - 7).order("created_at DESC")
     respond_to do |format|
       format.html
-      #format.js
-      #format.json { render json: @accounts }
     end
   end
 
   def show
     prepare_accounts
     @account = Account.find(params[:id])
-    @transactions = @account.transactions
+    @transactions = @account.transactions.where("created_at >= ?", Date.today - 7).order("created_at DESC")
     respond_to do |format|
       format.html
     end
@@ -61,10 +43,8 @@ class AccountsController < ApplicationController
     respond_to do |format|
       if @account.save
         format.js { render :js => "window.location.href = '#{account_path(@account)}'" }
-        format.json { render json: @account, status: :created, location: @account }
       else
         format.js
-        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -76,12 +56,8 @@ class AccountsController < ApplicationController
     respond_to do |format|
       if @account.update_attributes(params[:account].except('currency'))
         format.js { render :js => "window.location.href = '#{account_path(@account)}'" }
-        format.html { redirect_to @account, notice: 'Account was successfully updated.' }
-        format.json { head :no_content }
       else
         format.js
-        format.html { render action: "edit" }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -92,19 +68,7 @@ class AccountsController < ApplicationController
 
     respond_to do |format|
       format.js { render :js => "window.location.href = '#{accounts_path}'" }
-      format.html { redirect_to accounts_url }
-      format.json { head :no_content }
     end
-  end
-
-  private
-
-  def sort_column
-    Account.column_names.include?(params[:sort]) ? params[:sort] : "name"
-  end
-  
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
 end

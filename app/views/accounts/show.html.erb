@@ -43,6 +43,13 @@
 
   <br/>
 
+  <h3>最近一周的流水 
+      <span style="font-size:.6em;float:right;margin-top:5px;font-weight:normal">
+        <%= link_to account_transactions_path(@account) do %>
+          <i class="icon-th-list"></i> 显示全部
+        <% end %>
+      </span>
+  </h3>
   <%= render :partial=>"transactions/transactions" %>
 
 </div>

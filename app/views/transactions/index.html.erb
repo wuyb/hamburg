@@ -1,48 +1,47 @@
-
-        <div class="row-fluid">
-            <!-- the range buttons -->
-            <div class="btn-group" data-toggle="buttons-radio" style="float:right;margin-bottom:10px">
-              <button class="btn" id="filter_week">一周</button>
-              <button class="btn" id="filter_month">一月</button>
-              <button class="btn" id="filter_year">一年</button>
-              <button class="btn" id="filter_all">全部</button>
-          </div>
+<div class="row-fluid">
+<div class="span6">
+  <h3>全部流水<% if @account %> - <%= @account.name %><% end %></h3>
+</div>
+<% if @account %>
+    <div class="span3 offset3" style="margin-top:15px;">
+      <div style="float:right">
+        <%= link_to new_account_transaction_path(@account), :remote=>true, :class=>"btn btn-inverse", :account=>@account do %>
+          <i class="icon-plus-sign icon-white"></i> <div style="font-size:20px;display:inline">记帐</div>
+        <% end %>
       </div>
-      <div class="well">
-        <div class="row-fluid">
-            <div class="span12" id="transactions-by-time" style="height:300px"></div>
-        </div>
-      </div>
-
-<!--
-    <br/>
-    <div class="row-fluid">
-        <div class="span12">
-            <%= link_to '记帐', new_transaction_path, :remote => true, :class=>"btn btn-primary", :style=>"float: right" %>
-        </div>
     </div>
--->
-    <br/>
-    <div class="row-fluid">
-        <div class="span12">
-            <table class="table table-striped" id="transactions-table">
-                <tr>
-                    <th><%= sortable 'account_id', '帐户' %></th>
-                    <th><%= sortable 'amount', '金额' %></th>
-                    <th><%= sortable 'transaction_type', '类型' %></th>
-                    <th><%= sortable 'transaction_category_id', '类别' %></th>
-                    <th><%= sortable 'to_account_id', '转入帐户' %></th>
-                    <th><%= sortable 'created_at', '日期' %></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <% @paged_transactions.each do |transaction| %>
-                    <%= render :partial=>transaction %>
+<% end %>
+</div>
+
+<div class="row-fluid">
+
+    <div class="span12">
+        <table class="table table-hover" id="transactions-table">
+            <tr>
+                <% if !@account %>
+                    <th style="min-width:80px">帐户</th>
                 <% end %>
-            </table>
-            <div style="float:right;display:inline">
-                <%= paginate @paged_transactions %>
-            </div>
+                <th><%= sortable 'amount', '金额' %></th>
+                <th><%= sortable 'transaction_type', '类型' %></th>
+                <th><%= sortable 'transaction_category_id', '类别' %></th>
+                <th><%= sortable 'created_at', '日期' %></th>
+                <th>详细信息</th>
+                <th></th>
+            </tr>
+            <% @paged_transactions.each do |transaction| %>
+                <%= render :partial=>transaction %>
+            <% end %>
+        </table>
+        <div style="float:right;display:inline">
+            <%= paginate @paged_transactions %>
         </div>
     </div>
+</div>
+
+<% if @account %>
+    <script type="text/javascript">
+      $("#account_sidebar_item_<%= @account.id %>").addClass("active");
+      $("#account_sidebar_current_<%= @account.id%>").show();
+    </script>
+<% end %>
 

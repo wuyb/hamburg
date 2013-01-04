@@ -2,12 +2,14 @@
     <div class="span12">
         <table class="table table-hover" id="transactions-table">
             <tr>
-                <th style="min-width:80px"><%= sortable 'account_id', '帐户' %></th>
-                <th><%= sortable 'amount', '金额' %></th>
-                <th><%= sortable 'transaction_type', '类型' %></th>
-                <th><%= sortable 'transaction_category_id', '类别' %></th>
-                <th style="min-width:100px"><%= sortable 'created_at', '日期' %></th>
-                <th style="min-width:100px"><%= '详细信息' %></th>
+                <% if !@account %>
+                    <th style="min-width:80px">帐户</th>
+                <% end %>
+                <th>金额</th>
+                <th>类型</th>
+                <th>类别</th>
+                <th style="min-width:100px">日期</th>
+                <th style="min-width:100px">详细信息</th>
                 <th style="min-width:50px"></th>
             </tr>
             <% @transactions.each do |transaction| %>

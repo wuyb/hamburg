@@ -1,5 +1,7 @@
 <tr id="transaction_<%= transaction.id %>">
-  <td><%= transaction.account.name %></td>
+  <% if !@account %>
+    <td><%= transaction.account.name %></td>
+  <% end %>
   <td><%= transaction.amount %></td>
   <td><%= ["支出","转帐","收入"][transaction.transaction_type + 1] %></td>
   <td><%= transaction.transaction_category.name %></td>

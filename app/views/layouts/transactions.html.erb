@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project Hamburg - 财务</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= stylesheet_link_tag    "accounts", :media => "all" %>
+    <%= javascript_include_tag "jquery" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+    <div id="wrap">
+
+      <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+          <div class="container-fluid">
+            <ul class="nav">
+              <li><a class="brand" href="/"><span style="color:#BB2222">H</span>amburg</a></li>
+            </ul>
+            <ul class="nav pull-right">
+               <% if user_signed_in? %>
+                  <li><a href="#">我的目标</a></li>
+                  <li><a href="#">我的预算</a></li>
+                  <li class="active"><%= link_to "我的财务", accounts_path %></li>
+                  <li><%= link_to '记帐', new_transaction_path, :remote=>true %></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %><b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="#">个人信息</a>
+                        </li>
+                        <li>
+                          <a href="#">设置</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                          <%= link_to "退出", destroy_user_session_path, :method=>:delete %>
+                        </li>
+                      </ul>
+                  </li>
+               <% else %>
+                  <li><%= link_to "登录", new_user_session_path %></li>
+                  <li><%= link_to "注册", new_user_registration_path %></li>
+               <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <br/>
+      <div class="row-fluid">
+        <div class="span10 offset1">
+          <div class="row-fluid">
+              <div class="span8">
+                <%= yield %>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="new-transaction"> </div>
+
+    </div>
+
+
+    <div id="push"></div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span1 offset2"><a href="#">关于我们</a></div>
+          <div class="span1 offset1"><a href="#">隐私条款</a></div>
+          <div class="span1 offset1"><a href="#">联系我们</a></div>
+          <div class="span3 offset1">北京xx科技发展有限公司</div>
+        </div>
+      </div>
+    </div>
+
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "jquery.ui.datepicker-zh-CN" %>
+    <%= javascript_include_tag "flot/jquery.flot" %>
+    <%= javascript_include_tag "flot/jquery.flot.time" %>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="flot/excanvas.min.js"></script><![endif]-->
+
+    <script type="text/javascript">
+        $("[rel=tooltip]").tooltip();
+        $("[rel=nofollow]").tooltip();
+    </script>
+
+  </body>
+</html>
