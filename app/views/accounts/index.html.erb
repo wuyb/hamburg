@@ -1,8 +1,110 @@
-  <h3>最近一周的流水 
-      <span style="font-size:.6em;float:right;margin-top:5px;font-weight:normal">
-        <%= link_to transactions_path do %>
-          <i class="icon-th-list"></i> 显示全部
-        <% end %>
-      </span>
-  </h3>
+<div>
+  <div class="tabbable">
+    <ul class="nav nav-tabs">
+       <li class="active"><a href="#tab-portfolio" data-toggle="tab">资产变化</a></li>
+       <li><a href="#tab-income-expense" data-toggle="tab">收支对比</a></li>
+       <li><a href="#tab-expense-analysis" data-toggle="tab">支出分析</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-raphael active" id="tab-portfolio">
+        <div class="row-fluid">
+          <div class="span8">
+            <div id="canvas-portfolio"></div>
+          </div>
+          <div class="span4">
+            过去的一年，您的资产增长率为20%。其中投资性收益增长为10%。
+          </div>
+        </div>
+      </div>
+      <div class="tab-raphael" id="tab-income-expense">
+        <div class="row-fluid">
+          <div class="span8">
+            <div id="canvas-income-expense"></div>
+          </div>
+          <div class="span4">
+            过去的一年，您共有3个月份支出大于收入。其中较为大额的支出有：<ul><li>买电视</li><li>买冰箱</li><li>买洗衣机</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-raphael" id="tab-expense-analysis">
+        <div class="row-fluid">
+          <div class="span8">
+            <div id="canvas-expense-analysis"></div>
+          </div>
+          <div class="span4">
+            过去的一年，您的支出主要集中在食品和交通方面。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<hr/>
+</div>
+
+<script type="text/javascript">
+var fin = function () {
+    this.flag = r2.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+};
+var fout = function () {
+    this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+};
+var r1 = Raphael("canvas-portfolio", 420, 240);
+var r2 = Raphael("canvas-income-expense", 420, 240);
+var r3 = Raphael("canvas-expense-analysis", 420, 240);
+
+var lines = r1.linechart(
+  20, 20, 400, 200,           // location and size (x, y, width, height)
+  [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]],    // x-axis
+  [[12, 32, 23, 15, 17, 27, 22, 15, 17, 27, 22, 12]], // y-axis
+  { nostroke: false, axis: "0 0 1 1", symbol: "circle", smooth: false, axisxstep:11 } // options
+).hoverColumn(
+  function () {
+    this.tags = r1.set();
+    for (var i = 0, ii = this.y.length; i < ii; i++) {
+        this.tags.push(r1.tag(this.x, this.y[i], this.values[i], 160, 10).insertBefore(this).attr([{ fill: "#fff" }, { fill: this.symbols[i].attr("fill") }]));
+    }
+  },
+  function () {
+    this.tags && this.tags.remove();
+  }
+);
+lines.symbols.attr({ r: 6 });
+
+r2.barchart(20, 20, 400, 200, [[55, 20, 13, 32, 5, 1, 2, 10], [10, 2, 1, 5, 32, 13, 20, 55]], {stacked: true}).hover(fin, fout);
+Raphael.g.axis(50,230,400,null,null,8,2,["一月", "2", "3", "4","5", "6", "7", "8"], "|", 0, r2)
+//r2.g.axis(1, 0, 20, 1, 12, 1, null, ["1","2"], "|", 0);
+
+var pie = r3.piechart(
+  200, 120, 100,
+  [55, 20, 13, 32, 15],
+  {
+    legend: ["食品", "交通", "3", "4", "5"],
+    legendpos: "east"
+  });
+
+pie.hover(function () {
+    this.sector.stop();
+    this.sector.scale(1.1, 1.1, this.cx, this.cy);
+
+    if (this.label) {
+        this.label[0].stop();
+        this.label[0].attr({ r: 7.5 });
+        this.label[1].attr({ "font-weight": 800 });
+    }
+  }, function () {
+      this.sector.animate({ transform: 's1 1 ' + this.cx + ' ' + this.cy }, 500, "bounce");
+      if (this.label) {
+          this.label[0].animate({ r: 5 }, 500, "bounce");
+          this.label[1].attr({ "font-weight": 400 });
+      }
+  });
+</script>
+
+<h3>最近一周的流水 
+    <span style="font-size:.6em;float:right;margin-top:5px;font-weight:normal">
+      <%= link_to transactions_path do %>
+        <i class="icon-th-list"></i> 显示全部
+      <% end %>
+    </span>
+</h3>
 <%= render :partial=>"transactions/transactions" %>

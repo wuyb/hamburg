@@ -37,3 +37,13 @@
 .accounts-sidebar li .active {
   color: #BB2222;
 }
+
+.tab-raphael {
+    display: block !important;
+    position: absolute;
+    top: -9999px;
+}
+.tab-raphael.active {
+    position: relative;
+    top: 0;
+}
