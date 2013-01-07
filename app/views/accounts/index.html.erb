@@ -56,89 +56,86 @@
   $("#porfolio-ajax-loader").show();
 
   // start loading data for portfolio
-  $.get("/portfolio/", {},
+  $.get("portfolio/", {},
     function(data){
-      setTimeout(function() {
-        chart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'canvas-portfolio',
-                type: 'areaspline',
-                marginRight: 40,
-                marginBottom: 40
-            },
-            title: null,
-            subtitle: null,
-            xAxis: {
-                categories : data.dates,
-                labels: {
-                  step: Math.round((data.dates.length / 4)),
-                  y: 25,
-                  formatter : function() {
-                    if (data.type === "month") {
-                      var date = new Date(this.value);
-                      return date.getFullYear() + "-" + (date.getMonth() + 1);
-                    } else {
-                      return this.value;
-                    }
-                  }
-                }
-            },
-            credits: {
-              enabled: false
-            },
-            yAxis: {
-                title: {
-                    text: '净资产 (人民币)'
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }],
-                min: Math.min.apply(null, data.line)
-            },
-            tooltip: {
-                formatter: function() {
+      chart = new Highcharts.Chart({
+          chart: {
+              renderTo: 'canvas-portfolio',
+              type: 'areaspline',
+              marginRight: 40,
+              marginBottom: 40
+          },
+          title: null,
+          subtitle: null,
+          xAxis: {
+              categories : data.dates,
+              labels: {
+                step: Math.round((data.dates.length / 4)),
+                y: 25,
+                formatter : function() {
                   if (data.type === "month") {
-                    var date = new Date(this.x);
-                    return date.getFullYear() + "-" + (date.getMonth() + 1) + " : ¥" + this.y;
+                    var date = new Date(this.value);
+                    return date.getFullYear() + "-" + (date.getMonth() + 1);
                   } else {
-                    return this.x + " : ¥" + this.y;
+                    return this.value;
                   }
                 }
-            },
-            legend: {
-                enabled:false
-            },
-            series: [{
-                data: data.line
-            }]
-        });
-      $("#portfolio-canvas").show('slow');
-      $("#porfolio-ajax-loader").hide();
-      if (data.type === "month") {
-        $("#portfolio-range").html("过去一年");
-      } else if (data.type === "day") {
-        $("#portfolio-range").html("过去一月");
-      }
-      var start_total = data.line[0];
-      var current_total = data.line[data.line.length - 1];
-      if (start_total < current_total) {
-        $("#portfolio-direction").html("增加到");
-      } else if (start_total > current_total) {
-        $("#portfolio-direction").html("减少到");
-      } else {
-        $("#portfolio-direction").html("保持不变");
-      }
-      if (start_total != current_total) {
-        $("#portfolio-start-total").html(start_total + "元");
-        $("#portfolio-current-total").html(current_total + "元");
-      }
-      $("#portfolio-increment").html((current_total - start_total) + "元");
-      $("#portfolio-increment-rate").html(((current_total - start_total) / start_total * 100.0).toFixed(4) + "%");
-      }, 1000);
+              }
+          },
+          credits: {
+            enabled: false
+          },
+          yAxis: {
+              title: {
+                  text: '净资产 (人民币)'
+              },
+              plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+              }],
+              min: Math.min.apply(null, data.line)
+          },
+          tooltip: {
+              formatter: function() {
+                if (data.type === "month") {
+                  var date = new Date(this.x);
+                  return date.getFullYear() + "-" + (date.getMonth() + 1) + " : ¥" + this.y;
+                } else {
+                  return this.x + " : ¥" + this.y;
+                }
+              }
+          },
+          legend: {
+              enabled:false
+          },
+          series: [{
+              data: data.line
+          }]
+      });
+    $("#portfolio-canvas").show('slow');
+    $("#porfolio-ajax-loader").hide();
+    if (data.type === "month") {
+      $("#portfolio-range").html("过去一年");
+    } else if (data.type === "day") {
+      $("#portfolio-range").html("过去一月");
     }
-  ).success(function() {
+    var start_total = data.line[0];
+    var current_total = data.line[data.line.length - 1];
+    if (start_total < current_total) {
+      $("#portfolio-direction").html("增加到");
+    } else if (start_total > current_total) {
+      $("#portfolio-direction").html("减少到");
+    } else {
+      $("#portfolio-direction").html("保持不变");
+    }
+    if (start_total != current_total) {
+      $("#portfolio-start-total").html(start_total + "元");
+      $("#portfolio-current-total").html(current_total + "元");
+    }
+    $("#portfolio-increment").html((current_total - start_total) + "元");
+    $("#portfolio-increment-rate").html(((current_total - start_total) / start_total * 100.0).toFixed(4) + "%");
+  }).success(function() {
   })
   .error(function() {
     $("#porfolio-ajax-loader").hide();
