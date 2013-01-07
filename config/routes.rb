@@ -6,6 +6,10 @@ Hamburg::Application.routes.draw do
     get '/users/auth/:provider' => 'users/omniauth_callbacks#passthru'
   end
 
+  get '/portfolio/day_line' => 'portfolio#get_day_line'
+  get '/portfolio/month_line' => 'portfolio#get_month_line'
+  get '/portfolio' => 'portfolio#get_portfolio'
+
   resources :accounts do
     resources :transactions
   end

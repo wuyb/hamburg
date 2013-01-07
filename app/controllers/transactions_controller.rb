@@ -58,13 +58,12 @@ class TransactionsController < ApplicationController
     end
 
     @transaction.account = Account.find_by_id(params[:transaction][:account_id])
+    @account = @transaction.account
 
     prepare_data
 
     respond_to do |format|
       if @transaction.update_attributes(params[:transaction].except(:account_id).except(:transaction_category))
-        format.js  { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
-      else
         format.js
       end
     end
@@ -78,7 +77,7 @@ class TransactionsController < ApplicationController
     prepare_data
 
     respond_to do |format|
-      format.js  { render :js => "window.location.href = '#{account_path(@account)}'" }
+      format.js
     end
   end
 

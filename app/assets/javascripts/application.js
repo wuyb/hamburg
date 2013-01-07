@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery.ui.all
 //= require twitter/bootstrap
-//= require flot/jquery.flot
 //= require jquery_ujs
 //= require_tree .
 //= require_self
