@@ -45,7 +45,7 @@ class PortfolioController < ApplicationController
                           : current_user.transactions.where("transactions.created_at >= ?", Date.today - days).group_by {|t| t.created_at.beginning_of_month.to_s};
 
     # get the current total
-    current_total = Account.sum("balance")
+    current_total = current_total_balance account
     @current_total = current_total
 
     # calculate month line, the portfolio of the month X, is the total of the month X + 1 minus sum of all transactions of X + 1
@@ -55,7 +55,7 @@ class PortfolioController < ApplicationController
 
     (0..months).each do |month|
       month_line.unshift current_total.round
-      current_total -= transactions_by_month[current_month.to_s].inject(0) {|sum, x| sum + x.amount * x.transaction_type } if transactions_by_month[current_month.to_s]
+      current_total -= transactions_by_month[current_month.to_s].inject(0) {|sum, x| sum + x.amount_in_default_currency * x.transaction_type } if transactions_by_month[current_month.to_s]
       dates.unshift current_month.to_date
       current_month = (current_month - 1).beginning_of_month
     end
@@ -71,13 +71,13 @@ class PortfolioController < ApplicationController
                   : current_user.transactions.where("transactions.created_at >= ?", Date.today - days).order("transactions.created_at DESC")
 
     # get the current total
-    current_total = Account.sum("balance")
+    current_total = current_total_balance account
 
     # calculate day line, the portfolio of the day X, is the total of the day X + 1 minus sum of all transactions of X + 1
     sum_of_day = {}
     transactions.each do |transaction|
       distance = Date.today.mjd - transaction.created_at.to_date.mjd
-      sum_of_day[distance] = sum_of_day[distance] ? (sum_of_day[distance] + transaction.amount * transaction.transaction_type) : transaction.amount * transaction.transaction_type
+      sum_of_day[distance] = sum_of_day[distance] ? (sum_of_day[distance] + transaction.amount_in_default_currency * transaction.transaction_type) : transaction.amount_in_default_currency * transaction.transaction_type
     end
 
     day_line = []
@@ -87,6 +87,10 @@ class PortfolioController < ApplicationController
     end
 
     portfolio = { :line=>day_line, :dates=>dates_back(days), :type=>"day" }
+  end
+
+  def current_total_balance account = nil
+    account ? account.balance_in_default_currency : current_user.accounts.inject(0) {|sum, t| sum += t.balance_in_default_currency }
   end
 
   def dates_back days

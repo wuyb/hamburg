@@ -18,6 +18,11 @@ class Transaction < ActiveRecord::Base
 
   scope :since, lambda {|date| {:conditions=>{:created_at => (date .. Time.now)}}}
   scope :until, lambda {|date| {:conditions=>{:created_at => (Time.at(0) .. date)}}}
+
+  def amount_in_default_currency
+    account.currency.to_default_currency amount
+  end
+
   protected
 
   def init

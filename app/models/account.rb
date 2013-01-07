@@ -20,4 +20,7 @@ class Account < ActiveRecord::Base
     self.interest_rate  ||= 0.0
   end
 
+  def balance_in_default_currency
+    currency.to_default_currency balance
+  end
 end
