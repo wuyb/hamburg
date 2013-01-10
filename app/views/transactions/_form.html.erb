@@ -4,18 +4,44 @@
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <% if @transaction.persisted? %>
-      <h3>修改流水</h3>
+      <h3>修改</h3>
     <% else %>
-      <h3>新建流水</h3>
+      <h3>记帐</h3>
+      <div style="display:inline" class="modal-header-btn-group">
+        <div class="btn-group">
+          <a class="btn btn-small btn-info active" id="new-transaction-income-expense">收入/支出</a>
+          <a class="btn btn-small" id="new-transaction-cash">现金存取</a>
+          <a class="btn btn-small" id="new-transaction-creditcard">信用卡还款</a>
+          <a class="btn btn-small" id="new-transaction-transfer">内部转帐</a>
+        </div>
+      </div>
     <% end %>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body" id="transaction-income-expense">
 
-    <div class="field">
+    <div class="field visible-income-expense">
       帐户 : <%= f.collection_select :account_id, @accounts, :id, :name %>
     </div>
-    <div class="field">
+
+    <div class="field" id="transaction-cash-in-out" style="display:none">
+      存取 :
+      <div class="btn-group" style="display:inline;margin-bottom:5px">
+          <a class="btn btn-small" id="new-transaction-cash-in">存款</a>
+          <a class="btn btn-small btn-info active" id="new-transaction-cash-out">取现</a>
+      </div>
+
+    </div>
+
+    <div class="field visible-transfer">
+      转出 : <%= f.collection_select :account_id, @accounts, :id, :name %>
+    </div>
+
+    <div class="field visible-transfer">
+      转入 : <%= f.collection_select :to_account, @accounts, :id, :name %>
+    </div>
+
+    <div class="field visible-income-expense">
       类型 : <%= f.select :transaction_type, options_for_select([["支出", "-1"],["收入", "1"]], @transaction.transaction_type) %>
       <%= f.collection_select :transaction_category, 
                               TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : -1).to_s),
@@ -38,11 +64,7 @@
   </div>
   <div class="modal-footer">
     <a href="#" class="btn" data-dismiss="modal">取消</a>
-    <% if @transaction.persisted? %>
-      <%= f.submit "修改流水", :class=>"btn btn-primary"%>
-    <% else %>
-      <%= f.submit "新建流水", :class=>"btn btn-primary"%>
-    <% end %>
+    <%= f.submit "提交", :class=>"btn btn-primary"%>
   </div>
 
 </div>

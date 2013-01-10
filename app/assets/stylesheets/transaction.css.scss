@@ -1,3 +1,19 @@
 // Place all the styles related to the Transaction controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.modal-header-btn-group {
+  margin-left:10px; 
+}
+
+.modal-header-btn-group .btn {
+  margin-bottom:7px;
+}
+
+#transaction-income-expense .visible-transfer {
+  display: none
+}
+
+#transaction-transfer .visible-income-expense {
+  display: none
+}

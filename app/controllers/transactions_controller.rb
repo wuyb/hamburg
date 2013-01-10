@@ -14,7 +14,7 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @accounts = current_user.accounts
+    prepare_accounts
     @account = Account.find_by_id(params[:account_id].to_i)
     @transaction = Transaction.new(:account=>@account);
 
@@ -24,7 +24,7 @@ class TransactionsController < ApplicationController
   end
 
   def create
-    @transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category))
+    @transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:to_account))
 
     if params[:transaction][:transaction_category]
       @transaction.transaction_category = TransactionCategory.find_by_id(params[:transaction][:transaction_category])

@@ -44,3 +44,15 @@ body {
 a {
   color: #B22222;
 }
+
+.modal-header h3 {
+  display:inline
+}
+
+.modal-header .btn-group {
+  display:inline
+}
+
+.modal-header-btn-group {
+  
+}

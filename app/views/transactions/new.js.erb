@@ -1,8 +1,47 @@
+// show the modal dialog
 $('#new-transaction').html($('<%= escape_javascript(render(:partial => "form", :object=>@transaction)) %>'))
 $('#new-transaction-modal').modal('toggle');
 
+// clear the header selectors
+function clear() {
+  $('.modal-header-btn-group .active').removeClass('active');
+  $('.modal-header-btn-group .btn-info').removeClass('btn-info');
+  $('#transaction-cash-in-out').hide();
+}
+
+// the events for the header selectors
+$('.modal-header-btn-group .btn').bind('click', function() {
+
+  // general operation for all transactions
+  clear();
+  $(this).addClass("active");
+  $(this).addClass("btn-info");
+  if ($(this).attr("id") === "new-transaction-income-expense") {
+    $("#transaction-transfer").attr("id", "transaction-income-expense");
+  } else {
+    $("#transaction-income-expense").attr("id", "transaction-transfer");
+  }
+
+  if ($(this).attr("id") === "new-transaction-cash") {
+    $('#transaction-cash-in-out').show();
+    // remove all source accounts, add them according to the current selection of in/out - it is out by default
+    // in this case all cash accounts should be added as source
+    $('#transaction_to_account').empty();
+    <% if @accounts_by_category && @accounts_by_category['2'] %>
+      <% @accounts_by_category['2'].each do |account| %>
+        $('#transaction_account_id option[value="<%= account.id %>"]').remove();
+        $('#transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
+      <% end %>
+    <% end %>
+  }
+});
+
+
+
+// the date selector
 $('#transaction_created_at_value').datepicker({ altFormat: "yy-mm-dd", dateFormat: "yy年mm月dd日", altField: '#transaction_created_at', maxDate: "+0D", showButtonPanel: true});
 
+// the description toggler
 $('#toggle-description-link').bind('click', function() {
   if ($('#transaction-description').css("display") == "none") {
     $('#transaction-description').show();    
@@ -11,6 +50,7 @@ $('#toggle-description-link').bind('click', function() {
   }
 });
 
+// the transaction types
 $('#transaction_transaction_type').bind('change', function() {
   $('#transaction_transaction_category').empty();
   $('#transaction_transaction_category_field').show();
