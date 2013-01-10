@@ -11,7 +11,7 @@ scheduler = Rufus::Scheduler.start_new
     puts 'pulling currencies'
 
     # XXX currently use openexchangerates as data source, will update to BOC rates later for production
-    uri   = URI('http://openexchangerates.org/latest.json')
+    uri   = URI('http://openexchangerates.org/api/latest.json?app_id=2dd5673aa2154ce4bd39427675b91537')
     response  = Net::HTTP.get_response(uri)
     if response.code == '200'
       json = JSON.parse(response.body)

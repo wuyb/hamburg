@@ -9,6 +9,25 @@ function clear() {
   $('#transaction-cash-in-out').hide();
 }
 
+var nonCash = ['1', '3'];
+var cash = ['2'];
+var nonCredit = ['1', '2'];
+var credit = ['3'];
+var all = ['1', '2', '3'];
+
+function fill_accounts(fromCategories, toCategories) {
+  $('.visible-transfer #transaction_account_id').empty();
+  $('.visible-transfer #transaction_to_account').empty();
+  <% @accounts.each do |account| %>
+    if ($.inArray('<%= account.category %>', fromCategories) != -1) {
+        $('.visible-transfer #transaction_account_id').append('<option value="<%= account.id %>"><%= account.name %></option>');
+    }
+    if ($.inArray('<%= account.category %>', toCategories) != -1) {
+        $('.visible-transfer #transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
+    }
+  <% end %>
+}
+
 // the events for the header selectors
 $('.modal-header-btn-group .btn').bind('click', function() {
 
@@ -16,26 +35,53 @@ $('.modal-header-btn-group .btn').bind('click', function() {
   clear();
   $(this).addClass("active");
   $(this).addClass("btn-info");
+
   if ($(this).attr("id") === "new-transaction-income-expense") {
     $("#transaction-transfer").attr("id", "transaction-income-expense");
   } else {
     $("#transaction-income-expense").attr("id", "transaction-transfer");
-  }
+    if ($(this).attr("id") === "new-transaction-cash") {
+      $('#transaction-cash-in-out').show();
+      fill_accounts(nonCash, cash);
+      $('.visible-transfer #transaction_account_id').unbind('change');
+    } else if ($(this).attr("id") === "new-transaction-creditcard") {
+      fill_accounts(nonCredit, credit);
+      $('.visible-transfer #transaction_account_id').unbind('change');
+    } else if ($(this).attr("id") === "new-transaction-transfer") {
+      fill_accounts(all, all);
+      // remove the one currently selected in source accounts
+      <% if @accounts && @accounts.length >= 2 %>
+        var selected = '<%= @accounts[0].id %>';
+        $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
+        $('.visible-transfer #transaction_to_account option[value="' + selected + '"]').remove();
+        var selectedTo = '<%= @accounts[1].id %>';
+        $('.visible-transfer #transaction_to_account option[value="' + selectedTo + '"]').attr('selected', 'selected');
 
-  if ($(this).attr("id") === "new-transaction-cash") {
-    $('#transaction-cash-in-out').show();
-    // remove all source accounts, add them according to the current selection of in/out - it is out by default
-    // in this case all cash accounts should be added as source
-    $('#transaction_to_account').empty();
-    <% if @accounts_by_category && @accounts_by_category['2'] %>
-      <% @accounts_by_category['2'].each do |account| %>
-        $('#transaction_account_id option[value="<%= account.id %>"]').remove();
-        $('#transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
+        $('.visible-transfer #transaction_account_id').bind('change', function() {
+          var selected = $(this).val();
+          fill_accounts(all, all);
+          $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
+          $('.visible-transfer #transaction_to_account option[value="' + selected + '"]').remove();
+        });
       <% end %>
-    <% end %>
+    }
   }
 });
 
+
+// deposit
+$('#new-transaction-cash-in').bind('click', function() {
+  $('#new-transaction-cash-out').removeClass('active btn-info');
+  $(this).addClass('active btn-info');
+  fill_accounts(cash, nonCash);
+});
+
+// withdraw
+$('#new-transaction-cash-out').bind('click', function() {
+  $('#new-transaction-cash-in').removeClass('active btn-info');
+  $(this).addClass('active btn-info');
+    fill_accounts(nonCash, cash);
+});
 
 
 // the date selector
