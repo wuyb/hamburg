@@ -24,18 +24,4 @@ $('#transaction_transaction_type').bind('change', function() {
       $('#transaction_transaction_category').append('<option value="<%= category.id %>"><%= category.name %></option>')
     <% end %>
   }
-  if ($(this).val() == 0) {
-    $('#transaction_transaction_category_field').hide();
-    $('#transaction_to_account_field').show();
-    $('#transaction_to_account').empty();
-    <% if @transaction.account.nil? %>
-      <% for account in @accounts.collect{|x| x.id == @accounts[0].id ? nil : x}.compact() %>
-        $('#transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>')
-      <% end %>
-    <% else %>
-      <% for account in @accounts.collect{|x| x.id == @transaction.account.id ? nil : x}.compact() %>
-        $('#transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>')
-      <% end %>
-    <% end %>
-  }
 });

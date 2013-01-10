@@ -10,7 +10,9 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
-  # This method will do the following:
+  # This is used to render the sidebar of the accounts layout
+  #
+  # It will do the following:
   # 1. Retrieves all the @accounts that belongs to the user, order isn't important for now
   # 2. Categorizes the accounts to @accounts_by_category
   # 3. Calculates the @subtotal_by_category

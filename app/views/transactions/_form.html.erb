@@ -16,9 +16,9 @@
       帐户 : <%= f.collection_select :account_id, @accounts, :id, :name %>
     </div>
     <div class="field">
-      类型 : <%= f.select :transaction_type, options_for_select([["收入", "1"], ["支出", "-1"]], @transaction.transaction_type) %>
+      类型 : <%= f.select :transaction_type, options_for_select([["支出", "-1"],["收入", "1"]], @transaction.transaction_type) %>
       <%= f.collection_select :transaction_category, 
-                              TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : 1).to_s),
+                              TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : -1).to_s),
                               :id, :name, {:selected => @transaction.transaction_category ? @transaction.transaction_category.id : 1} %>
     </div>
     <div class="field">
