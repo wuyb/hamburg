@@ -26,6 +26,9 @@ function fill_accounts(fromCategories, toCategories) {
         $('.visible-transfer #transaction_link_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
     }
   <% end %>
+  var selected = '<%= @account ? @account.id : @accounts[0].id %>';
+  $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
+  $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
 }
 
 $('.visible-income-expense #transaction_transaction_type option[value="0"]').remove();
@@ -54,14 +57,7 @@ $('.modal-header-btn-group .btn').bind('click', function() {
       $('.visible-transfer #transaction_account_id').unbind('change');
     } else if ($(this).attr("id") === "new-transaction-transfer") {
       fill_accounts(all, all);
-      // remove the one currently selected in source accounts
       <% if @accounts && @accounts.length >= 2 %>
-        var selected = '<%= @accounts[0].id %>';
-        $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
-        $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
-        var selectedTo = '<%= @accounts[1].id %>';
-        $('.visible-transfer #transaction_link_account option[value="' + selectedTo + '"]').attr('selected', 'selected');
-
         $('.visible-transfer #transaction_account_id').bind('change', function() {
           var selected = $(this).val();
           fill_accounts(all, all);
