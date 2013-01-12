@@ -16,5 +16,8 @@
                 <%= render :partial=>transaction %>
             <% end %>
         </table>
+        <div style="float:right;display:inline">
+            <%= paginate @transactions %>
+        </div>
     </div>
 </div>

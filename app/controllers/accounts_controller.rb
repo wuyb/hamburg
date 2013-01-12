@@ -2,11 +2,12 @@ class AccountsController < ApplicationController
 
   layout  "accounts"
 
+  helper_method :sort_column, :sort_direction
   before_filter :authenticate_user!
 
   def index
     prepare_accounts
-    @transactions = current_user.transactions.where("transactions.created_at >= ?", Date.today - 7).order("created_at DESC")
+    @transactions = current_user.transactions.where("transactions.created_at >= ?", Date.today - 7).order("created_at DESC").page(params[:page]).per(10)
     respond_to do |format|
       format.html
     end
@@ -15,7 +16,7 @@ class AccountsController < ApplicationController
   def show
     prepare_accounts
     @account = Account.find(params[:id])
-    @transactions = @account.transactions.where("created_at >= ?", Date.today - 7).order("created_at DESC")
+    @transactions = @account.transactions.where("created_at >= ?", Date.today - 7).order("created_at DESC").page(params[:page]).per(10)
     respond_to do |format|
       format.html
     end
@@ -69,6 +70,14 @@ class AccountsController < ApplicationController
     respond_to do |format|
       format.js { render :js => "window.location.href = '#{accounts_path}'" }
     end
+  end
+
+  def sort_column
+    Transaction.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
 end
