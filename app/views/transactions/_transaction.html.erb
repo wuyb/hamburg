@@ -4,7 +4,11 @@
   <% end %>
   <td><%= transaction.amount %></td>
   <td><%= ["支出","转帐","收入"][transaction.transaction_type + 1] %></td>
-  <td><%= transaction.transaction_category.name %></td>
+  <% if transaction.transaction_category %>
+    <td><%= transaction.transaction_category.name %></td>
+  <% else %>
+    <td><%= transaction.transaction_type == 1 ? "转入" : "转出" %></td>
+  <% end %>
   <td><%= l transaction.created_at %></td>
   <td><%= transaction.description %>
       <% if !transaction.tag_list.empty? %>

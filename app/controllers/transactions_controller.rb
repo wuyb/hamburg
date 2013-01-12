@@ -24,19 +24,33 @@ class TransactionsController < ApplicationController
   end
 
   def create
-    @transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:to_account))
+    @transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:link_account))
 
-    if params[:transaction][:transaction_category]
+    if @transaction.transaction_type != 0 && params[:transaction][:transaction_category]
       @transaction.transaction_category = TransactionCategory.find_by_id(params[:transaction][:transaction_category])
     end
 
     @transaction.account = Account.find_by_id(params[:transaction][:account_id])
 
+    if @transaction.transaction_type == 0
+      @transaction.transaction_type = -1 
+      @transaction.link_account = Account.find_by_id(params[:transaction][:link_account])
+      @transaction.link_transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:link_account))
+      @transaction.link_transaction.transaction_type = 1
+      @transaction.link_transaction.amount = @transaction.account.currency.to_currency @transaction.link_account.currency, @transaction.amount 
+      @transaction.link_transaction.account = @transaction.link_account
+      @transaction.link_transaction.link_account = @transaction.account
+    end
+
     respond_to do |format|
-      if @transaction.save!
-        format.js { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
-      else
-        format.js
+      @transaction.transaction do 
+        @transaction.save!
+        @transaction.link_transaction.link_transaction = @transaction if @transaction.link_transaction
+        if @transaction.link_transaction && @transaction.link_transaction.save! || !@transaction.link_transaction
+          format.js { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
+        else
+          format.js
+        end
       end
     end
   end
@@ -53,47 +67,64 @@ class TransactionsController < ApplicationController
   def update
     @transaction = Transaction.find_by_id(params[:id])
 
-    if params[:transaction][:transaction_category]
+    if !@transaction.link_transaction && params[:transaction][:transaction_category]
       @transaction.transaction_category = TransactionCategory.find_by_id(params[:transaction][:transaction_category])
     end
 
-    @transaction.account = Account.find_by_id(params[:transaction][:account_id])
-    @account = @transaction.account
+    @transaction.amount = params[:transaction][:amount].to_f
+    @transaction.tag_list = params[:transaction][:tag_list]
+    @transaction.description = params[:transaction][:description]
+    @transaction.created_at = params[:transaction][:created_at] if params[:transaction][:created_at]
 
-    prepare_data
+    if @transaction.link_transaction
+      @transaction.link_transaction.amount = @transaction.account.currency.to_currency @transaction.link_account.currency, params[:transaction][:amount].to_f
+      @transaction.link_transaction.tag_list = params[:transaction][:tag_list]
+      @transaction.link_transaction.description = params[:transaction][:description]
+      @transaction.link_transaction.created_at = params[:transaction][:created_at] if params[:transaction][:created_at]
+    else
+      @transaction.transaction_type = params[:transaction][:transaction_type].to_i
+    end
 
     respond_to do |format|
-      if @transaction.update_attributes(params[:transaction].except(:account_id).except(:transaction_category))
-        format.js
+      @transaction.transaction do
+
+        @transaction.save!
+
+        if @transaction.link_transaction && @transaction.link_transaction.save! || !@transaction.link_transaction
+          format.js { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
+        else
+          format.js
+        end
       end
     end
+
   end
 
   def destroy
     @transaction = Transaction.find_by_id(params[:id])
-    @account = @transaction.account
-    @transaction.destroy
-
-    prepare_data
+    @transaction.transaction do
+      @transaction.link_transaction.destroy if @transaction.link_transaction
+      @transaction.destroy
+    end
 
     respond_to do |format|
-      format.js
+      format.js { render :js => "window.location.href = '#{account_path(@transaction.account)}'" }
     end
   end
 
   private
 
   def prepare_data
-    @days = days params
-    @by = params[:by].nil? ? "all" : params[:by]
+#    @days = days params
+#    @by = params[:by].nil? ? "all" : params[:by]
     @start_date = start_date params
     @end_date = end_date params
-    @flot_type = params[:flot_type].nil? ? "by_date" : params[:flot_type]
+#    @flot_type = params[:flot_type].nil? ? "by_date" : params[:flot_type]
 
 
-    @account = Account.find_by_id(params[:account_id].to_i) if params[:account_id]
+   @account = Account.find_by_id(params[:account_id].to_i) if params[:account_id]
 
-    @transactions = !@account ? current_user.transactions.since(@start_date).until(@end_date) : @account.transactions.since(@start_date).until(@end_date)
+    @transactions = !@account ? current_user.transactions: @account.transactions.since(@start_date).until(@end_date)
     @paged_transactions = !@account ? current_user.transactions.since(@start_date).until(@end_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10) : @account.transactions.since(@start_date).until(@end_date).order(sort_column + ' ' + sort_direction).page(params[:page]).per(10)
 
     prepare_accounts

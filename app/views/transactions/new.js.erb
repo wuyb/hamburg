@@ -1,5 +1,5 @@
 // show the modal dialog
-$('#new-transaction').html($('<%= escape_javascript(render(:partial => "form", :object=>@transaction)) %>'))
+$('#new-transaction').html($('<%= escape_javascript(render(:partial => "form", :object=>@transaction)) %>'));
 $('#new-transaction-modal').modal('toggle');
 
 // clear the header selectors
@@ -17,16 +17,18 @@ var all = ['1', '2', '3'];
 
 function fill_accounts(fromCategories, toCategories) {
   $('.visible-transfer #transaction_account_id').empty();
-  $('.visible-transfer #transaction_to_account').empty();
+  $('.visible-transfer #transaction_link_account').empty();
   <% @accounts.each do |account| %>
     if ($.inArray('<%= account.category %>', fromCategories) != -1) {
         $('.visible-transfer #transaction_account_id').append('<option value="<%= account.id %>"><%= account.name %></option>');
     }
     if ($.inArray('<%= account.category %>', toCategories) != -1) {
-        $('.visible-transfer #transaction_to_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
+        $('.visible-transfer #transaction_link_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
     }
   <% end %>
 }
+
+$('.visible-income-expense #transaction_transaction_type option[value="0"]').remove();
 
 // the events for the header selectors
 $('.modal-header-btn-group .btn').bind('click', function() {
@@ -38,7 +40,10 @@ $('.modal-header-btn-group .btn').bind('click', function() {
 
   if ($(this).attr("id") === "new-transaction-income-expense") {
     $("#transaction-transfer").attr("id", "transaction-income-expense");
+    $('.visible-income-expense #transaction_transaction_type option[value="0"]').remove();
   } else {
+    $('.visible-income-expense #transaction_transaction_type').append('<option value="0"></option>');
+    $("#transaction_transaction_type").val("0");
     $("#transaction-income-expense").attr("id", "transaction-transfer");
     if ($(this).attr("id") === "new-transaction-cash") {
       $('#transaction-cash-in-out').show();
@@ -53,15 +58,15 @@ $('.modal-header-btn-group .btn').bind('click', function() {
       <% if @accounts && @accounts.length >= 2 %>
         var selected = '<%= @accounts[0].id %>';
         $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
-        $('.visible-transfer #transaction_to_account option[value="' + selected + '"]').remove();
+        $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
         var selectedTo = '<%= @accounts[1].id %>';
-        $('.visible-transfer #transaction_to_account option[value="' + selectedTo + '"]').attr('selected', 'selected');
+        $('.visible-transfer #transaction_link_account option[value="' + selectedTo + '"]').attr('selected', 'selected');
 
         $('.visible-transfer #transaction_account_id').bind('change', function() {
           var selected = $(this).val();
           fill_accounts(all, all);
           $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
-          $('.visible-transfer #transaction_to_account option[value="' + selected + '"]').remove();
+          $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
         });
       <% end %>
     }

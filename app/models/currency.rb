@@ -7,4 +7,8 @@ class Currency < ActiveRecord::Base
     default_currency.rate_to_usd * amount / rate_to_usd
   end
 
+  def to_currency(currency, amount)
+    currency.rate_to_usd * amount / rate_to_usd
+  end
+
 end

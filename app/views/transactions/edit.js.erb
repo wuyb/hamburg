@@ -1,5 +1,4 @@
-$('#new-transaction').html($('<%= escape_javascript(render(:partial => "form", :object=>@transaction)) %>'))
-
+$('#new-transaction').html($('<%= escape_javascript(render(:partial => "form", :object=>@transaction)) %>'));
 $('#new-transaction-modal').modal('toggle');
 
 $('#transaction_created_at_value').datepicker({ altFormat: "yy-mm-dd", dateFormat: "yy年mm月dd日", altField: '#transaction_created_at', maxDate: "+0D", showButtonPanel: true});
@@ -25,3 +24,13 @@ $('#transaction_transaction_type').bind('change', function() {
     <% end %>
   }
 });
+
+<% if @transaction.link_transaction %>
+  $('.visible-income-expense #transaction_transaction_type').append('<option value="0"></option>');
+  $(".visible-income-expense #transaction_transaction_type").val("0");
+  $("#transaction-income-expense").attr("id", "transaction-transfer");
+<% else %>
+  $('.visible-income-expense #transaction_transaction_type option[value="0"]').remove();
+  $("#transaction-transfer").attr("id", "transaction-income-expense");
+<% end %>
+

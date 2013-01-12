@@ -30,19 +30,28 @@
           <a class="btn btn-small" id="new-transaction-cash-in">存款</a>
           <a class="btn btn-small btn-info active" id="new-transaction-cash-out">取现</a>
       </div>
-
     </div>
 
-    <div class="field visible-transfer">
-      转出 : <%= f.collection_select :account_id, @accounts, :id, :name %>
-    </div>
+    <% if @transaction.link_transaction %>
+      <div class="field visible-transfer">
+        <%= @transaction.transaction_type == 1 ? "转入" : "转出"%> : <%= @transaction.account.name %>
+      </div>
 
-    <div class="field visible-transfer">
-      转入 : <%= f.collection_select :to_account, @accounts, :id, :name %>
-    </div>
+      <div class="field visible-transfer">
+        <%= @transaction.transaction_type == -1 ? "转入" : "转出"%> : <%= @transaction.link_account.name %>
+      </div>
+    <% else %>
+      <div class="field visible-transfer">
+        <%= @transaction.transaction_type == 1 ? "转入" : "转出"%>: <%= f.collection_select :account_id, @accounts, :id, :name %>
+      </div>
+
+      <div class="field visible-transfer">
+        <%= @transaction.transaction_type == -1 ? "转入" : "转出"%> : <%= f.collection_select :link_account, @accounts, :id, :name %>
+      </div>
+    <% end %> 
 
     <div class="field visible-income-expense">
-      类型 : <%= f.select :transaction_type, options_for_select([["支出", "-1"],["收入", "1"]], @transaction.transaction_type) %>
+      类型 : <%= f.select :transaction_type, options_for_select([["支出", "-1"],["收入", "1"], ["", "0"]], @transaction.transaction_type) %>
       <%= f.collection_select :transaction_category, 
                               TransactionCategory.find(:all, :conditions => 'transaction_type=' + (@transaction.persisted? ? @transaction.transaction_type : -1).to_s),
                               :id, :name, {:selected => @transaction.transaction_category ? @transaction.transaction_category.id : 1} %>
