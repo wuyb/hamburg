@@ -24,18 +24,21 @@ class TransactionsController < ApplicationController
   end
 
   def create
-    @transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:link_account))
+    @transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:link_account).except(:transfer_account))
 
     if @transaction.transaction_type != 0 && params[:transaction][:transaction_category]
       @transaction.transaction_category = TransactionCategory.find_by_id(params[:transaction][:transaction_category])
     end
-
-    @transaction.account = Account.find_by_id(params[:transaction][:account_id])
+    if @transaction.transaction_type != 0
+      @transaction.account = Account.find_by_id(params[:transaction][:account_id])
+    else
+      @transaction.account = Account.find_by_id(params[:transaction][:transfer_account])
+    end
 
     if @transaction.transaction_type == 0
       @transaction.transaction_type = -1 
       @transaction.link_account = Account.find_by_id(params[:transaction][:link_account])
-      @transaction.link_transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:link_account))
+      @transaction.link_transaction = Transaction.new(params[:transaction].except(:account_id).except(:transaction_category).except(:link_account).except(:transfer_account))
       @transaction.link_transaction.transaction_type = 1
       @transaction.link_transaction.amount = @transaction.account.currency.to_currency @transaction.link_account.currency, @transaction.amount 
       @transaction.link_transaction.account = @transaction.link_account

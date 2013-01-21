@@ -15,20 +15,28 @@ var nonCredit = ['1', '2'];
 var credit = ['3'];
 var all = ['1', '2', '3'];
 
-function fill_accounts(fromCategories, toCategories) {
-  $('.visible-transfer #transaction_account_id').empty();
+function fill_accounts(fromCategories, toCategories, removeLink) {
+
+  removeLink = typeof removeLink !== 'undefined' ? removeLink : true;
+
+  $('.visible-transfer #transaction_transfer_account').empty();
   $('.visible-transfer #transaction_link_account').empty();
   <% @accounts.each do |account| %>
     if ($.inArray('<%= account.category %>', fromCategories) != -1) {
-        $('.visible-transfer #transaction_account_id').append('<option value="<%= account.id %>"><%= account.name %></option>');
+        $('.visible-transfer #transaction_transfer_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
     }
     if ($.inArray('<%= account.category %>', toCategories) != -1) {
         $('.visible-transfer #transaction_link_account').append('<option value="<%= account.id %>"><%= account.name %></option>');
     }
   <% end %>
   var selected = '<%= @account ? @account.id : @accounts[0].id %>';
-  $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
-  $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
+  var selectedCategory = '<%= @account ? @account.category : @accounts[0].category %>';
+  if ($.inArray(selectedCategory, fromCategories) != -1) {
+    $('.visible-transfer #transaction_transfer_account option[value="' + selected + '"]').attr('selected', 'selected');
+    if (removeLink) {
+      $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
+    }
+  }
 }
 
 $('.visible-income-expense #transaction_transaction_type option[value="0"]').remove();
@@ -51,17 +59,17 @@ $('.modal-header-btn-group .btn').bind('click', function() {
     if ($(this).attr("id") === "new-transaction-cash") {
       $('#transaction-cash-in-out').show();
       fill_accounts(nonCash, cash);
-      $('.visible-transfer #transaction_account_id').unbind('change');
+      $('.visible-transfer #transaction_transfer_account').unbind('change');
     } else if ($(this).attr("id") === "new-transaction-creditcard") {
       fill_accounts(nonCredit, credit);
-      $('.visible-transfer #transaction_account_id').unbind('change');
+      $('.visible-transfer #transaction_transfer_account').unbind('change');
     } else if ($(this).attr("id") === "new-transaction-transfer") {
       fill_accounts(all, all);
       <% if @accounts && @accounts.length >= 2 %>
-        $('.visible-transfer #transaction_account_id').bind('change', function() {
+        $('.visible-transfer #transaction_transfer_account').bind('change', function() {
           var selected = $(this).val();
-          fill_accounts(all, all);
-          $('.visible-transfer #transaction_account_id option[value="' + selected + '"]').attr('selected', 'selected');
+          fill_accounts(all, all, false);
+          $('.visible-transfer #transaction_transfer_account option[value="' + selected + '"]').attr('selected', 'selected');
           $('.visible-transfer #transaction_link_account option[value="' + selected + '"]').remove();
         });
       <% end %>
