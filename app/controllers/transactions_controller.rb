@@ -74,6 +74,10 @@ class TransactionsController < ApplicationController
       @transaction.transaction_category = TransactionCategory.find_by_id(params[:transaction][:transaction_category])
     end
 
+    if @transaction.transaction_type != 0
+      @transaction.account = Account.find_by_id(params[:transaction][:account_id])
+    end
+
     @transaction.amount = params[:transaction][:amount].to_f
     @transaction.tag_list = params[:transaction][:tag_list]
     @transaction.description = params[:transaction][:description]
