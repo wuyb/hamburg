@@ -9,6 +9,7 @@ Hamburg::Application.routes.draw do
   get '/portfolio/day_line' => 'portfolio#get_day_line'
   get '/portfolio/month_line' => 'portfolio#get_month_line'
   get '/portfolio' => 'portfolio#get_portfolio'
+  get '/portfolio/expense' => 'portfolio#get_expense_by_category'
 
   resources :accounts do
     resources :transactions

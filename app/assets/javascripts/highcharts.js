@@ -7294,7 +7294,7 @@ Axis.prototype = {
 			};
 		}
 
-		if (!this.isLinked && !this.isDatetimeAxis && tickPositions.length > maxTicks[xOrY] && this.options.alignTicks !== false) {
+		if (!this.isLinked && !this.isDatetimeAxis && tickPositions && tickPositions.length > maxTicks[xOrY] && this.options.alignTicks !== false) {
 			maxTicks[xOrY] = tickPositions.length;
 		}
 		chart.maxTicks = maxTicks;

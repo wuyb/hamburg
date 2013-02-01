@@ -2,10 +2,10 @@
   <div class="tabbable">
     <ul class="nav nav-tabs">
        <li class="active"><a href="#tab-portfolio" data-toggle="tab">资产变化</a></li>
-       <!--
+     <!--
        <li><a href="#tab-income-expense" data-toggle="tab">收支对比</a></li>
-       <li><a href="#tab-expense-analysis" data-toggle="tab">支出分析</a></li>
      -->
+       <li><a href="#tab-expense-analysis" data-toggle="tab">支出分析</a></li>
        <li style="float:right;"><%= image_tag "ajax-loader.gif", :id=>"porfolio-ajax-loader",  :style=>"display:none" %></li>
     </ul>
     <div class="tab-content" style="display:none" id="portfolio-canvas">
@@ -39,10 +39,9 @@
       <div class="tab-raphael" id="tab-expense-analysis">
         <div class="row-fluid">
           <div class="span8">
-            <div id="canvas-expense-analysis"></div>
+            <div id="canvas-expense-analysis" style="min-width: 500px; height: 240px; margin: 0 auto"></div>
           </div>
           <div class="span4">
-            过去的一年，您的支出主要集中在食品和交通方面。
           </div>
         </div>
       </div>
@@ -58,6 +57,7 @@
   // start loading data for portfolio
   $.get("portfolio/", {},
     function(data){
+
       chart = new Highcharts.Chart({
           chart: {
               renderTo: 'canvas-portfolio',
@@ -113,36 +113,84 @@
               data: data.line
           }]
       });
-    $("#portfolio-canvas").show('slow');
-    $("#porfolio-ajax-loader").hide();
-    if (data.type === "month") {
-      $("#portfolio-range").html("过去一年");
-    } else if (data.type === "day") {
-      $("#portfolio-range").html("过去一月");
-    }
-    var start_total = data.line[0];
-    var current_total = data.line[data.line.length - 1];
-    if (start_total < current_total) {
-      $("#portfolio-direction").html("增加到");
-    } else if (start_total > current_total) {
-      $("#portfolio-direction").html("减少到");
-    } else {
-      $("#portfolio-direction").html("保持不变");
-    }
-    if (start_total != current_total) {
-      $("#portfolio-start-total").html(start_total + "元");
-      $("#portfolio-current-total").html(current_total + "元");
-    }
-    $("#portfolio-increment").html((current_total - start_total) + "元");
-    $("#portfolio-increment-rate").html(((current_total - start_total) / start_total * 100.0).toFixed(4) + "%");
-  }).success(function() {
-  })
-  .error(function() {
-    $("#porfolio-ajax-loader").hide();
-  })
-  .complete(function() {
-  });
+      $("#portfolio-canvas").show('slow');
+      $("#porfolio-ajax-loader").hide();
+      if (data.type === "month") {
+        $("#portfolio-range").html("过去一年");
+      } else if (data.type === "day") {
+        $("#portfolio-range").html("过去一月");
+      }
+      var start_total = data.line[0];
+      var current_total = data.line[data.line.length - 1];
+      if (start_total < current_total) {
+        $("#portfolio-direction").html("增加到");
+      } else if (start_total > current_total) {
+        $("#portfolio-direction").html("减少到");
+      } else {
+        $("#portfolio-direction").html("保持不变");
+      }
+      if (start_total != current_total) {
+        $("#portfolio-start-total").html(start_total + "元");
+        $("#portfolio-current-total").html(current_total + "元");
+      }
+      $("#portfolio-increment").html((current_total - start_total) + "元");
+      $("#portfolio-increment-rate").html(((current_total - start_total) / start_total * 100.0).toFixed(4) + "%");
 
+    }
+  ).success(function() {}).error(function() { $("#porfolio-ajax-loader").hide();}).complete(function() {});
+
+  $.get("portfolio/expense", {},
+    function(data){
+      var series = [];
+      for (var key in data) {
+        series.push([key, data[key]]);
+      }
+      var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'canvas-expense-analysis',
+                plotBackgroundColor: null,
+                type: 'pie',
+                plotBorderWidth: null,
+                plotShadow: false,
+                marginRight: 40,
+                marginBottom: 40,
+                marginTop:20
+            },
+            credits: {
+              enabled: false
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+              pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+              percentageDecimals: 0
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    center : [200, 100],
+                    size : '90%',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ Math.round(this.point.percentage) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '',
+                data: series
+            }]
+      });
+    }
+
+  ).success(function() {}).error(function() {}).complete(function() {}); 
 </script>
 
 <h3>最近一周的流水 

@@ -34,6 +34,29 @@ class PortfolioController < ApplicationController
 
   end
 
+  def get_expense_by_category
+    account = Account.find_by_id(params[:account_id].to_i) if params[:account_id]
+    min_transaction_date = account ? account.transactions.minimum(:created_at) : current_user.transactions.minimum(:created_at)
+    days = Date.today - min_transaction_date.to_date
+    if days > 30
+      start_date = Time.now.beginning_of_year
+    else
+      start_date = Time.now.beginning_of_month
+    end
+
+    expense_by_category = account ? account.transactions.where("transaction_type = -1 and created_at >= ?", start_date).group_by { |t| t.transaction_category.name } : current_user.transactions.group_by { |t| t.transaction_category.name }
+    expense_amount_category = {}
+    expense_by_category.each do |category, transactions|
+      expense_amount_category[category] = transactions.inject(0) {|sum, x| sum + x.amount_in_default_currency }
+    end
+
+    logger.debug expense_amount_category.to_json
+
+    respond_to do |format|
+      format.json { render :json => expense_amount_category.to_json }
+    end
+  end
+
   private
 
   def month_line months

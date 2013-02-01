@@ -16,8 +16,6 @@ class Transaction < ActiveRecord::Base
   after_save       :update_account
   before_save      :revert
   before_destroy   :revert
-#  before_create    :init_account
-#  after_find       :init_transfer_account
 
   scope :since, lambda {|date| {:conditions=>{:created_at => (date .. Time.now)}}}
   scope :until, lambda {|date| {:conditions=>{:created_at => (Time.at(0) .. date)}}}
@@ -32,14 +30,6 @@ class Transaction < ActiveRecord::Base
     self.description  ||= ""
     self.amount ||= 0.0
     self.created_at ||= Time.now
-  end
-
-  def init_transfer_account
-    transfer_account = account
-  end
-
-  def init_account
-    account = transfer_account if !transfer_account.nil?
   end
 
   def revert
