@@ -44,7 +44,9 @@ class PortfolioController < ApplicationController
       start_date = Time.now.beginning_of_month
     end
 
-    expense_by_category = account ? account.transactions.where("transaction_type = -1 and created_at >= ?", start_date).group_by { |t| t.transaction_category.name } : current_user.transactions.group_by { |t| t.transaction_category.name }
+    expense_by_category = account ? account.transactions.where("transaction_category_id IS NOT NULL and transaction_type = -1 and transactions.created_at >= ?", start_date).group_by { |t| t.transaction_category ? t.transaction_category.name : ''} \
+    : current_user.transactions.where("transaction_category_id IS NOT NULL and transaction_type = -1 and transactions.created_at >= ?", start_date).group_by { |t| t.transaction_category ? t.transaction_category.name : '' }
+
     expense_amount_category = {}
     expense_by_category.each do |category, transactions|
       expense_amount_category[category] = transactions.inject(0) {|sum, x| sum + x.amount_in_default_currency }
