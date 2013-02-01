@@ -41,8 +41,8 @@ class PortfolioController < ApplicationController
     days = months * 30
     account = Account.find_by_id(params[:account_id].to_i) if params[:account_id]
 
-    transactions_by_month = account ? account.transactions.where("transactions.created_at >= ?", Date.today - days).group_by {|t| t.created_at.beginning_of_month.to_s} \
-                          : current_user.transactions.where("transactions.created_at >= ?", Date.today - days).group_by {|t| t.created_at.beginning_of_month.to_s};
+    transactions_by_month = account ? account.transactions.where("transactions.created_at >= ?", Date.today - days).group_by {|t| t.created_at.beginning_of_month.to_s[0..10]} \
+                          : current_user.transactions.where("transactions.created_at >= ?", Date.today - days).group_by {|t| t.created_at.beginning_of_month.to_s[0..10]};
 
     # get the current total
     current_total = current_total_balance account
@@ -55,7 +55,7 @@ class PortfolioController < ApplicationController
 
     (0..months).each do |month|
       month_line.unshift current_total.round
-      current_total -= transactions_by_month[current_month.to_s].inject(0) {|sum, x| sum + x.amount_in_default_currency * x.transaction_type } if transactions_by_month[current_month.to_s]
+      current_total -= transactions_by_month[current_month.to_s[0..10]].inject(0) {|sum, x| sum + x.amount_in_default_currency * x.transaction_type } if transactions_by_month[current_month.to_s[0..10]]
       dates.unshift current_month.to_date
       current_month = (current_month - 1).beginning_of_month
     end
