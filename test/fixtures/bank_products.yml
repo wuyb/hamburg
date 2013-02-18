@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  code: MyString
+  type: 
+  area: MyString
+  currency: MyString
+  start_date: 2013-02-11
+  end_date: 2013-02-11
+  expiration_date: 2013-02-11
+  status: MyString
+  net_value: 1.5
+  term: MyString
+  style: MyString
+  init_investment: 1.5
+  incr_investment: 1.5
+  risk: MyString
+  fin_date: 2013-02-11
+  can_buy: false
+
+two:
+  name: MyString
+  code: MyString
+  type: 
+  area: MyString
+  currency: MyString
+  start_date: 2013-02-11
+  end_date: 2013-02-11
+  expiration_date: 2013-02-11
+  status: MyString
+  net_value: 1.5
+  term: MyString
+  style: MyString
+  init_investment: 1.5
+  incr_investment: 1.5
+  risk: MyString
+  fin_date: 2013-02-11
+  can_buy: false

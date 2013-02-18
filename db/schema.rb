@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130112144901) do
+ActiveRecord::Schema.define(:version => 20130211132907) do
 
   create_table "accounts", :force => true do |t|
     t.string   "category"
@@ -22,7 +22,38 @@ ActiveRecord::Schema.define(:version => 20130112144901) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.integer  "user_id"
+    t.string   "currency"
     t.integer  "currency_id"
+  end
+
+  create_table "bank_products", :force => true do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "type"
+    t.string   "area"
+    t.string   "currency"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.date     "expiration_date"
+    t.string   "status"
+    t.float    "net_value"
+    t.string   "term"
+    t.string   "style"
+    t.float    "init_investment"
+    t.float    "incr_investment"
+    t.string   "risk"
+    t.date     "fin_date"
+    t.boolean  "can_buy"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "bank_id"
+  end
+
+  create_table "banks", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "currencies", :force => true do |t|
@@ -80,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20130112144901) do
     t.integer  "account_id"
     t.integer  "transaction_type"
     t.integer  "link_account_id"
+    t.string   "currency"
     t.integer  "link_transaction_id"
   end
 
