@@ -16,7 +16,7 @@ module Crawler
       @@bank_products_detail_base_url = 'http://bank.stockstar.com/bank/'
 
       def start
-        i = 2
+        i = 1
         while true
           doc = Nokogiri::HTML(open(@@bank_products_list_url + i.to_s))
 
@@ -66,7 +66,7 @@ module Crawler
                     product.special_notes   = table.xpath('.//tr')[17].css('td')[1].content.strip    # special notes for this product
                     product.special_sales   = table.xpath('.//tr')[18].css('td')[1].content.strip    # special sales
                   else
-                    puts "Bad : ${name}"
+                    puts "Bad : #{name}"
                   end
 
                   puts "#{product.name} - #{product.bank.name} - #{product.area} - #{product.start_date} - #{product.end_date}"
