@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# This command will start crawling the bank products
+
+require_relative '../lib/crawlers/bank_products/stockstar.rb'
+
+ActiveRecord::Base.establish_connection(
+  :adapter  => 'mysql2',
+  :database => 'hamburg_dev',
+  :username => 'root',
+  :password => 'password',
+  :host     => 'localhost')
+
+#BankProduct.delete_all
+
+Crawler::BankProducts::StockStarBankProductCrawler.new.start { |product| product.save }

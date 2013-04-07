@@ -7,7 +7,7 @@ require_relative 'bank_product_crawler'
 module Crawler
   module BankProduct
 
-    class CMBProductCrawler < BankProductCrawler
+    class ICBCProductCrawler < BankProductCrawler
 
       def initialize
         super('http://www.cmbchina.com/cfweb/svrajax/product.ashx?op=search&type=s&pagesize=999999999&pageindex=1', '招商银行')
@@ -42,15 +42,6 @@ module Crawler
           bp.init_investment  = p["InitMoney"]
           bp.net_value        = p["NetValue"]
           return bp
-      end
-
-      def page_index
-        return ''
-      end
-
-      def is_last_page response
-        # always true because the URL gets all the products at the same time
-        true
       end
 
     end
